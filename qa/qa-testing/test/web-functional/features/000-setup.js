@@ -8,8 +8,9 @@ beforeEach('setup', async () => {
     await Promise.all(emulator.shutdown());
     emulator.setMaxNodes(1);
     browser.waitUntil(() => nodes.keys().length);
-    browser.pause(400);
+    browser.pause(1000);
     browser.url('http://localhost:8200');
+    browser.waitForExist('header');
 });
 
 

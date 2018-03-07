@@ -28,17 +28,16 @@ describe('Node List tab', () => {
             }, 5000, 'expected nodes to equal number set by emulator');
         });
 
-        it('@watch should show all nodes to be new then alive', () => {
+        it('should show all nodes to be new then alive', () => {
             browser.waitUntil(() =>
                 browser.elements('div.react-grid-Canvas>div>div').value.length === NUM_OF_NODES
             );
 
-            ['new', 'alive'].forEach(status =>
-                _.times(NUM_OF_NODES).forEach(idx =>
-                    browser.elements('div.react-grid-Canvas>div>div').value[idx]
-                        .waitForExist(`div=${status}`)
-                )
-            );
+            ['new', 'alive'].forEach( status => {
+                browser.elements('div.react-grid-Canvas>div>div').value.forEach(el => {
+                    el.waitForExist(`div=${status}`);
+                });
+            });
         });
     });
 });

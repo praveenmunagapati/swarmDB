@@ -16,11 +16,11 @@ describe('Node graph tab', () => {
     describe('individual nodes', () => {
         it('should display specs when mouseover on a node', () => {
             const node = emulator.getNodes()[0];
-                browser.waitForExist(`g[data-test='node-${node.ip}-${node.port}']`);
-                browser.moveToObject(`g[data-test='node-${node.ip}-${node.port}']`);
-                browser.waitForExist(`td=${node.address}`);
-                browser.waitForExist(`span*=${node.available}`);
-                browser.waitForExist(`span*=${node.used}`);
+            browser.waitForExist(`g[data-test='node-${node.ip}-${node.port}']`);
+            browser.moveToObject(`g[data-test='node-${node.ip}-${node.port}']`);
+            browser.waitForExist(`td=${node.address}`);
+            browser.waitForExist(`span*=${node.available}`);
+            browser.waitForExist(`span*=${node.used}`);
             ['new', 'alive'].forEach( status => {
                 browser.waitForExist(`div=${status}`);
             });

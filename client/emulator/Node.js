@@ -36,8 +36,7 @@ module.exports = function Node(port) {
                 nodes.has(port) ? reject() : resolve();
             }, 200);
         }),
-        sendToClients: ({cmd, data}) => sendToClients(cmd, data),
-        setUsage: (val) => updateUsage(val)
+        sendToClients: ({cmd, data}) => sendToClients(cmd, data)
     });
 
     const me = nodes.get(port);
@@ -139,27 +138,6 @@ module.exports = function Node(port) {
             me.isShutdown || sendMessage();
         }, _.random(5000, 10000));
     }());
-
-    autorun(function logUsageWarning() {
-        if (me.used >= 85) {
-            sendToClients('log', [
-                {
-                    level: 'warn',
-                    timestamp: new Date().toISOString(),
-                    message: `Usage is at ${me.used}`,
-                    node: me
-                }
-            ]);
-
-        };
-    });
-
-    function updateUsage(val) {
-        me.used = val;
-        sendToClients('updateNodes', [
-            _.pick(me, 'ip', 'port', 'address', 'used', 'available')
-        ]);
-    };
 
     function getPeerInfo(node) {
         return nodes.values().filter(peer => peer.address !== node.address).map(n => _.pick(n, 'address', 'ip', 'port'));

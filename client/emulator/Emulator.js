@@ -27,8 +27,7 @@ module.exports = {
     getData: getData,
     setData: setData,
     behaveRandomly: (v) => behaveRandomly.set(v),
-    isRandom: () => behaveRandomly.get(),
-    setRandomNodeUsage: (val) => getRandomNode().setUsage(val)
+    isRandom: () => behaveRandomly.get()
 };
 
 

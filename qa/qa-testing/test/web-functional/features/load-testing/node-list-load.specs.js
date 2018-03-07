@@ -6,10 +6,9 @@ describe('Node list load tests', () => {
 
     it('should be able to handle a lot of nodes quickly', () => {
         // There seems to be some side effects that limits how many nodes can be created and listed.
-        // At one point it was consistently hitting a ceiling of 39, now it's at 27. Restarting mac
-        // didn't help.
+        // Cannot create and list more than 39 nodes. Doesn't seem to be a memory issue.
 
-        const NUM_OF_NODES = 27
+        const NUM_OF_NODES = 39;
 
         emulator.setMaxNodes(NUM_OF_NODES);
         const start = new Date().getTime();

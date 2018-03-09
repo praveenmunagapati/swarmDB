@@ -18,11 +18,10 @@ describe('Emulator connections', () => {
     });
 
     it('should be able to connect to the emulator', () => {
-        browser.waitUntil(() => findComponentsTest('KeyList').length > 0)
+        browser.waitUntil(() => findComponentsTest('KeyList').length > 0);
     });
 
-
-    it('@watch should be able to set data', () => {
+    it('should be able to set data', () => {
         const data = {
             text: [1, 72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 44, 32, 116, 104, 105, 115, 32, 105, 115, 32, 115, 111, 109, 101, 32, 112, 108, 97, 105, 110, 32, 116, 101, 120, 116, 46]
         };

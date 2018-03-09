@@ -5,6 +5,12 @@
     "test-debug": "chimp web-functional/chimp.js --inspectMocha --mocha"
   },
   "dependencies": {
-    "chimp": "^0.51.0"
+    "chai": "^4.1.2",
+    "chimp": "^0.51.0",
+    "lodash": "^4.17.5",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-functional-test": "file:../../react-functional-test",
+    "simple-monads": "^1.1.10"
   }
 }

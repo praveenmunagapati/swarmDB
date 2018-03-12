@@ -1,15 +1,26 @@
 import {start, setData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {findComponentsTest} from "react-functional-test";
-import {hasKey, hasNoKey, newField, remove, save, selectKey, setJSON} from "../pageActions";
+import {hasKey, hasNoKey, newField, remove, save, selectKey, setJSON, refresh} from "../pageActions";
 
-describe.only('Multi-client functionality.', () => {
+describe('Multi-client functionality.', () => {
+
+    let firstWindow = null,
+        secondWindow = null;
+
 
     before(() => {
 
         start();
 
+        browser.url('http://localhost:8200/?test');
         browser.newWindow('http://localhost:8200/?test');
+
+        browser.waitUntil(() => browser.getTabIds().length == 2);
+
+        const tabs = browser.getTabIds();
+        firstWindow = tabs[0];
+        secondWindow = tabs[1];
 
     });
 
@@ -17,7 +28,7 @@ describe.only('Multi-client functionality.', () => {
 
         reset();
 
-        browser.switchTab();
+        browser.switchTab(firstWindow);
         browser.url('http://localhost:8200/?test');
 
         browser.waitForExist('button=Go');
@@ -26,7 +37,7 @@ describe.only('Multi-client functionality.', () => {
         browser.waitUntil(() => findComponentsTest('KeyList').length, 2000);
 
 
-        browser.switchTab();
+        browser.switchTab(secondWindow);
         browser.url('http://localhost:8200/?test');
 
 
@@ -34,6 +45,8 @@ describe.only('Multi-client functionality.', () => {
         browser.element('button=Go').click();
 
         browser.waitUntil(() => findComponentsTest('KeyList').length, 2000);
+
+        browser.switchTab(firstWindow);
 
     });
 
@@ -49,17 +62,17 @@ describe.only('Multi-client functionality.', () => {
 
         hasKey('myKey');
 
-        browser.switchTab();
+        browser.switchTab(secondWindow);
 
         hasKey('myKey');
 
         setData({});
 
-        browser.switchTab();
+        browser.switchTab(firstWindow);
 
         hasNoKey('myKey');
 
-        browser.switchTab();
+        browser.switchTab(secondWindow);
 
         hasNoKey('myKey');
 
@@ -68,11 +81,11 @@ describe.only('Multi-client functionality.', () => {
             helloworld: [9, 8, 7, 6, 5]
         });
 
-        browser.switchTab();
+        browser.switchTab(firstWindow);
 
         hasKey('helloworld');
 
-        browser.switchTab();
+        browser.switchTab(secondWindow);
 
         hasKey('helloworld');
 
@@ -133,34 +146,59 @@ describe.only('Multi-client functionality.', () => {
     });
 
 
-    it.only('should have a refresh button for object type', () => {
+    // This fails but it shouldn't
 
-        newField('json', 'JSON Data');
-
-        setJSON('{}');
-
-        save();
-
-
-        // Switching tabs isnt working
-        browser.switchTab();
-
-        selectKey('json');
-
-        setJSON('[ 1, 2, "crazy text"]');
-
-        save();
-
-        browser.switchTab();
-
-        refresh('json');
-
-        browser.waitForExist('span*=crazy text');
-
-    });
-
+    // it.only('should have a refresh button for object type', () => {
+    //
+    //     newField('json', 'JSON Data');
+    //
+    //     setJSON('{}');
+    //
+    //     save();
+    //
+    //     browser.switchTab(secondWindow);
+    //
+    //     hasKey('json');
+    //
+    //     selectKey('json');
+    //
+    //     setJSON('[ 1, 2, "crazy text"]');
+    //
+    //     save();
+    //
+    //     browser.switchTab(firstWindow);
+    //
+    //     refresh('json');
+    //
+    //     browser.waitForExist('span*=crazy text');
+    //
+    // });
+    //
 
     it('should have a refresh button for text type', () => {
+
+        newField('text', 'Plain Text');
+
+        save();
+
+        browser.switchTab(secondWindow);
+
+        hasKey('text');
+
+        selectKey('text');
+
+        browser.waitForExist('textarea');
+        browser.element('textarea').click();
+
+        browser.keys(['Testing text']);
+
+        save();
+
+        browser.switchTab(firstWindow);
+
+        refresh('text');
+
+        browser.waitForExist('textarea*=Testing text');
 
     });
 

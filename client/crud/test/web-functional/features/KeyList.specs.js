@@ -1,7 +1,7 @@
 import {start, setData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {findComponentsTest} from "react-functional-test";
-import {newField} from "../pageActions";
+import {newField, setJSON} from "../pageActions";
 
 describe('KeyList functionality', () => {
 
@@ -82,6 +82,8 @@ describe('KeyList functionality', () => {
 
         it('should be able to add a key with object type', () => {
 
+            browser.waitForExist('.glyphicon-plus');
+
             newField('test', 'JSON Data');
 
             checkUndo({
@@ -94,6 +96,8 @@ describe('KeyList functionality', () => {
         });
 
         it('should be able to add a key with text type', () => {
+
+            browser.waitForExist('.glyphicon-plus');
 
             newField('test', 'Plain Text');
 
@@ -162,7 +166,7 @@ describe('KeyList functionality', () => {
 
 
     // Also fails under existing implementation.
-    //
+
     // it('should not be able to rename a key to another pre-existing keyname', () => {
     //
     //     browser.waitForExist('span*=textA');
@@ -172,6 +176,21 @@ describe('KeyList functionality', () => {
     //         browser.keys(['textB', 'Enter']);
     //
     //     expect(rename).to.throw();
+    //
+    // });
+
+
+    // Weird replication of old data for some reason.
+
+    // it('should be able to add and edit several new json keys', () => {
+    //
+    //     newField('json1', 'JSON Data');
+    //
+    //     setJSON('[1, 2, 3]');
+    //
+    //     newField('json2', 'JSON Data');
+    //
+    //     setJSON('{ "hello": "world" }');
     //
     // });
 

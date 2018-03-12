@@ -1,6 +1,7 @@
 import {start, setData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {findComponentsTest} from "react-functional-test";
+import {newField} from "../pageActions";
 
 describe('KeyList functionality', () => {
 
@@ -81,12 +82,7 @@ describe('KeyList functionality', () => {
 
         it('should be able to add a key with object type', () => {
 
-            browser.element('.glyphicon-plus').click();
-
-            browser.keys(['test', 'Enter']);
-
-            browser.waitForExist('button*=JSON Data');
-            browser.element('button*=JSON Data').click();
+            newField('test', 'JSON Data');
 
             checkUndo({
                 verifyDo: () =>
@@ -99,12 +95,7 @@ describe('KeyList functionality', () => {
 
         it('should be able to add a key with text type', () => {
 
-            browser.element('.glyphicon-plus').click();
-
-            browser.keys(['test', 'Enter']);
-
-            browser.waitForExist('button*=Text');
-            browser.element('button*=Text').click();
+            newField('test', 'Plain Text');
 
             checkUndo({
                 verifyDo: () =>
@@ -134,22 +125,6 @@ describe('KeyList functionality', () => {
         expect(browser.isExisting('.glyphicon-font')).to.be.true;
 
     });
-
-
-    // This fails because we want to refactor the communication system
-    // to permit renaming.
-    //
-    // it('should be able to rename a key without downloading', () => {
-    //
-    //     browser.waitForExist('span=textA');
-    //
-    //     browser.element('span=textA').click();
-    //
-    //     browser.keys(['newkey', 'Enter']);
-    //
-    //     browser.waitForExist('span=newkey');
-    //
-    // });
 
     it('should be able to rename a key after downloading', () => {
 

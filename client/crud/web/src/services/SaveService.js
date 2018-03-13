@@ -24,7 +24,7 @@ const clearEditingData = () => {
 
 export const save = () => {
     const changes = generateChanges();
-
+    console.log('changes in save service: ', changes)
     clearEditingData();
 
     sendToNodes('sendDataToNode', changes);

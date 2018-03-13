@@ -67,11 +67,22 @@ module.exports = {
     //             }
     //         })),
     //
-    requestKeyList: (obj, ws) =>
+
+    // requestKeyList: (obj, ws) =>
+    //     ws.send(JSON.stringify(
+    //         {
+    //             cmd: 'keyListUpdate',
+    //             data: data.keys()
+    //         })),
+
+    requestKeyList: (obj, ws) => {
         ws.send(JSON.stringify(
             {
-                cmd: 'requestKeyList'
-            })),
+                cmd: 'update',
+                data: data.keys()
+            }
+        ))
+    },
     //
     sendDataToNode: changes => forEach(changes, mergeAndDelete),
 

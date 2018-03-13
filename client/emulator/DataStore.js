@@ -10,23 +10,69 @@ const mergeAndDelete = (val, key) =>
 
 module.exports = {
 
-    requestBytearray: (obj, ws) =>
+    read: (obj, ws) => {
         ws.send(JSON.stringify(
             {
-                cmd: 'bytearrayUpdate',
-                data: {
-                    key: obj.key,
-                    bytearray: data.get(obj.key)
-                }
-            })),
+                cmd: 'read',
+                data:
+                    {
+                        key: obj.key
+                    }
+            }
+        ))
+    },
 
+
+    update: (obj, ws) => {
+        ws.send(JSON.stringify(
+            {
+                cmd: 'update',
+                data:
+                    {
+                        key: obj.key,
+                        bytearray: data.get(obj.key) || ''
+                    }
+            }
+        ))
+    },
+
+
+    // delete: (obj, ws) => {
+    //
+    // },
+
+
+    aggregate: (objs, ws) => {
+        objs.data.forEach( obj => {
+            ws.send(JSON.stringify(
+                {
+                    cmd: obj.cmd,
+                    data:
+                        {
+                            key: obj.key,
+                            bytearray: data.get(obj.key) || ''
+                        }
+                }
+            ))
+        })
+    },
+
+    // requestBytearray: (obj, ws) =>
+    //     ws.send(JSON.stringify(
+    //         {
+    //             cmd: 'bytearrayUpdate',
+    //             data: {
+    //                 key: obj.key,
+    //                 bytearray: data.get(obj.key)
+    //             }
+    //         })),
+    //
     requestKeyList: (obj, ws) =>
         ws.send(JSON.stringify(
             {
-                cmd: 'keyListUpdate',
-                data: data.keys()
+                cmd: 'requestKeyList'
             })),
-
+    //
     sendDataToNode: changes => forEach(changes, mergeAndDelete),
 
     getData: () => data,
@@ -39,7 +85,7 @@ module.exports = {
 
 observe(data, (changes) => {
     nodes.forEach(node => node.sendToClients({
-        cmd: changes.type === 'delete' ? 'keyListDelete' : 'keyListUpdate',
+        cmd: changes.type === 'delete' ? 'delete' : 'update',
         data: [changes.name]
     }));
 });

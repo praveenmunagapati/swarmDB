@@ -11,6 +11,8 @@ export const touch = key =>
                   : data.set(key, observable.map({ mostRecentTimestamp: new Date().getTime() }));
 
 
+addCommandProcessor('keyListUpdate', keys => keys.forEach(touch));
+
 
 addCommandProcessor('update', ({key, bytearray = null}) => {
     touch(key);
@@ -33,8 +35,6 @@ addCommandProcessor('delete', key => {
     removePreviousHistory();
     updateHistoryMessage(<span>Deleted keys <code key={1}>{JSON.stringify(keys)}</code> from node.</span>);
 });
-
-
 
 
 // addCommandProcessor('keyListUpdate', keys => keys.forEach(touch));

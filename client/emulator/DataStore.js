@@ -16,7 +16,8 @@ module.exports = {
                 cmd: 'read',
                 data:
                     {
-                        key: obj.key
+                        key: obj.key,
+                        bytearray: data.get(obj.key)
                     }
             }
         ))
@@ -78,7 +79,7 @@ module.exports = {
     requestKeyList: (obj, ws) => {
         ws.send(JSON.stringify(
             {
-                cmd: 'update',
+                cmd: 'keyListUpdate',
                 data: data.keys()
             }
         ))

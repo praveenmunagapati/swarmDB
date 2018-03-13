@@ -23,40 +23,58 @@ module.exports = {
         ))
     },
 
-
-    update: (obj, ws) => {
+    requestKeyList: (obj, ws) => {
         ws.send(JSON.stringify(
             {
-                cmd: 'update',
-                data:
-                    {
-                        key: obj.key,
-                        bytearray: data.get(obj.key) || ''
-                    }
+                cmd: 'keyListUpdate',
+                data: data.keys()
             }
         ))
     },
 
+    sendDataToNode: changes => forEach(changes, mergeAndDelete),
 
-    // delete: (obj, ws) => {
+    getData: () => data,
+    setData: obj => {
+        data.clear();
+        data.merge(obj);
+    }
+
+    // update: (obj, ws) => {
+    //     ws.send(JSON.stringify(
+    //         {
+    //             cmd: 'update',
+    //             data:
+    //                 {
+    //                     key: obj.key,
+    //                     bytearray: data.get(obj.key) || ''
+    //                 }
+    //         }
+    //     ))
+    // },
     //
+    //
+    // // delete: (obj, ws) => {
+    // //
+    // // },
+    //
+    //
+    // aggregate: (objs, ws) => {
+    //     objs.data.forEach( obj => {
+    //         ws.send(JSON.stringify(
+    //             {
+    //                 cmd: obj.cmd,
+    //                 data:
+    //                     {
+    //                         key: obj.key,
+    //                         bytearray: data.get(obj.key) || ''
+    //                     }
+    //             }
+    //         ))
+    //     })
     // },
 
 
-    aggregate: (objs, ws) => {
-        objs.data.forEach( obj => {
-            ws.send(JSON.stringify(
-                {
-                    cmd: obj.cmd,
-                    data:
-                        {
-                            key: obj.key,
-                            bytearray: data.get(obj.key) || ''
-                        }
-                }
-            ))
-        })
-    },
 
     // requestBytearray: (obj, ws) =>
     //     ws.send(JSON.stringify(
@@ -76,22 +94,6 @@ module.exports = {
     //             data: data.keys()
     //         })),
 
-    requestKeyList: (obj, ws) => {
-        ws.send(JSON.stringify(
-            {
-                cmd: 'keyListUpdate',
-                data: data.keys()
-            }
-        ))
-    },
-    //
-    sendDataToNode: changes => forEach(changes, mergeAndDelete),
-
-    getData: () => data,
-    setData: obj => {
-        data.clear();
-        data.merge(obj);
-    }
 };
 
 

@@ -8,9 +8,9 @@ module.exports = {
     requestAllNodes: (data, connection) =>
         connection.send(JSON.stringify({cmd: 'updateNodes', data: getAllNodesInfo()})),
     read,
-    update,
+    // update,
     // delete,
-    aggregate,
+    // aggregate,
     sendDataToNode,
     // requestBytearray,
     requestKeyList

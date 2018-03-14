@@ -98,6 +98,8 @@ module.exports = {
 
 
 observe(data, (changes) => {
+    console.log('changes in datastore: ', changes);
+    console.log('changes.name in datastore: ', [changes.name]);
     nodes.forEach(node => node.sendToClients({
         cmd: changes.type === 'delete' ? 'delete' : 'update',
         data: [changes.name]

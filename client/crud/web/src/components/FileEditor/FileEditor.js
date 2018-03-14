@@ -31,9 +31,6 @@ export class FileEditor extends Component {
 
             const arr = new Uint8Array(reader.result);
 
-            console.log('bytearray:', [PREFIX, ...arr]);
-            console.log('reader', reader);
-
 
             execute({
                 doIt: () => {
@@ -78,30 +75,49 @@ export class FileEditor extends Component {
 
     render() {
 
-        const {keyData} = this.props;
+        const {keyData, keyName} = this.props;
 
         return (
-            <div>
-                {
-                    keyData.get('filename') &&
+            <div style={{ padding: 15 }}>
+                <BS.Panel>
+                    <BS.Panel.Heading>
+                        File Editor
+                    </BS.Panel.Heading>
+                    <BS.Panel.Body>
+                        <div>File size: <code><FileSize numBytes={keyData.get('bytearray').length - 1}/></code></div>
+                        <div>File name: <code>{keyName}</code></div>
 
-                    <div>
-                        Uploaded <FileName filename={keyData.get('filename')}/> successfully.
-                    </div>
-                }
+                        <hr/>
 
-                <div>File size: <FileSize numBytes={keyData.get('bytearray').length - 1}/></div>
+                        <BS.ListGroup>
+                            <BS.ListGroupItem onClick={this.download.bind(this)}>
+                                <BS.Glyphicon glyph='download'/> Download
+                            </BS.ListGroupItem>
+                        </BS.ListGroup>
 
-                <button onClick={this.download.bind(this)}>
-                    <BS.Glyphicon glyph='download'/>
-                </button>
+                        <hr/>
 
-                <form onSubmit={this.onSubmit.bind(this)}>
-                    <input
-                        type='file'
-                        ref={el => this.fileSelector = el}/>
-                    <input type='submit'/>
-                </form>
+                            <BS.FormGroup>
+                                <input
+                                    type='file'
+                                    ref={el => this.fileSelector = el}/>
+                                <BS.ListGroup>
+                                    <BS.ListGroupItem onClick={this.onSubmit.bind(this)}>
+                                        Submit
+                                    </BS.ListGroupItem>
+                                </BS.ListGroup>
+                            </BS.FormGroup>
+
+                        {
+                            keyData.get('filename') &&
+
+                            <div>
+                                Uploaded <FileName filename={keyData.get('filename')}/> successfully.
+                            </div>
+                        }
+
+                    </BS.Panel.Body>
+                </BS.Panel>
             </div>
         );
     }

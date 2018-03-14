@@ -1,5 +1,6 @@
 import {enableExecution} from "../../services/CommandQueueService";
 import {FileName} from './FileName';
+import {FileSize} from "./FileSize";
 
 export const PREFIX = 2;
 
@@ -28,9 +29,15 @@ export class FileEditor extends Component {
                 oldFilename = props.keyData.get('filename');
 
 
+            const arr = new Uint8Array(reader.result);
+
+            console.log('bytearray:', [PREFIX, ...arr]);
+            console.log('reader', reader);
+
+
             execute({
                 doIt: () => {
-                    props.keyData.set('bytearray', [PREFIX, ...this.result]);
+                    props.keyData.set('bytearray', [PREFIX, ...arr]);
                     props.keyData.set('filename', file.name);
                 },
                 undoIt: () => {
@@ -50,6 +57,25 @@ export class FileEditor extends Component {
 
     }
 
+
+    download() {
+
+        const bytearray = this.props.keyData.get('bytearray');
+        const arrBuffer = new Uint8Array(bytearray).buffer;
+
+        const blob = new Blob([arrBuffer]);
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+
+        const fileName = this.props.keyData.get('filename')
+            || this.props.keyName;
+
+        link.download = fileName;
+        link.click();
+
+    }
+
+
     render() {
 
         const {keyData} = this.props;
@@ -63,6 +89,12 @@ export class FileEditor extends Component {
                         Uploaded <FileName filename={keyData.get('filename')}/> successfully.
                     </div>
                 }
+
+                <div>File size: <FileSize numBytes={keyData.get('bytearray').length - 1}/></div>
+
+                <button onClick={this.download.bind(this)}>
+                    <BS.Glyphicon glyph='download'/>
+                </button>
 
                 <form onSubmit={this.onSubmit.bind(this)}>
                     <input

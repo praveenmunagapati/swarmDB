@@ -1,8 +1,8 @@
-import {newField} from "../pageActions";
+import {newField, save} from "../pageActions";
 import {setData, start} from "../../../../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 
-describe.only('File Editor', () => {
+describe('File Editor', () => {
 
 
     before(() => start());
@@ -49,6 +49,27 @@ describe.only('File Editor', () => {
 
     });
 
+    //
+    // it.only('should be able to upload a file and hit the save button twice', () => {
+    //
+    //     browser.waitForExist('.glyphicon-plus');
+    //
+    //     newField('file', 'File');
+    //
+    //     const path = __dirname + '/testfile.txt';
+    //
+    //     browser.chooseFile('input[type=file]', path);
+    //
+    //     browser.element('input[type=submit]').click();
+    //
+    //     save();
+    //     save();
+    //
+    //     browser.waitForExist('div*=File size:');
+    //
+    // });
+
+
 
     it('should be able to download a file', () => {
 
@@ -62,9 +83,13 @@ describe.only('File Editor', () => {
 
         browser.element('input[type=submit]').click();
 
-
         browser.element('.glyphicon-download').click();
 
+    });
+
+    it('should be able to download an empty file', () => {
+
+        browser.waitForExist('.glyphicon-plus');
 
         newField('emptyfile', 'File');
 

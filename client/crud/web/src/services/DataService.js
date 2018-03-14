@@ -13,14 +13,14 @@ export const touch = key =>
 
 addCommandProcessor('keyListUpdate', keys => keys.forEach(touch));
 
-
-addCommandProcessor('update', ({key, bytearray = null}) => {
-    touch(key);
+addCommandProcessor('update', ({keys, bytearray = null}) => {
+    Object.keys(keys).forEach( key => touch(key));
     if (bytearray) data.get(key).set('bytearray', new Uint8Array(bytearray));
 
     removePreviousHistory();
-    updateHistoryMessage(<span>Updated <code key={1}>{key}</code> from node.</span>);
+    updateHistoryMessage(<span>Updated <code key={1}>{keys}</code> from node.</span>);
 });
+
 
 addCommandProcessor('read', ({key, bytearray}) => {
     touch(key);
@@ -37,7 +37,6 @@ addCommandProcessor('delete', key => {
     removePreviousHistory();
     updateHistoryMessage(<span>Deleted keys <code key={1}>{JSON.stringify(keys)}</code> from node.</span>);
 });
-
 
 // addCommandProcessor('keyListUpdate', keys => keys.forEach(touch));
 

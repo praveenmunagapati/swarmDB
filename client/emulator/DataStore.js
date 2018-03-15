@@ -5,9 +5,6 @@ const {nodes} = require('./NodeStore');
 
 const data = observable.map(getSampleData());
 
-const mergeAndDelete = (val, key) =>
-    val === 'deleted' ? data.delete(key) : data.set(key, val);
-
 module.exports = {
 
     requestKeyList: (obj, ws) => {
@@ -42,10 +39,9 @@ module.exports = {
         data.set(obj.key, obj.bytearray);
     },
 
-    delete: obj => {
+    destroy: obj => {
         data.delete(obj.key);
     },
-
 
     getData: () => data,
     setData: obj => {

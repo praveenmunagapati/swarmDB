@@ -1,5 +1,5 @@
 const {maxNodes} = require('./Values');
-const {read, update, delete, requestKeyList} = require('./DataStore');
+const {read, update, destroy, requestKeyList} = require('./DataStore');
 const {getAllNodesInfo} = require('./NodeStore.js');
 
 
@@ -9,15 +9,12 @@ const CommandProcessors = {
         connection.send(JSON.stringify({cmd: 'updateNodes', data: getAllNodesInfo()})),
     read,
     update,
-    delete,
-    // aggregate
-
+    destroy,
     aggregate: (data, ws) => {
         data.forEach(cmd => {
             CommandProcessors[cmd.cmd](cmd.data, ws);
         });
     },
-
     requestKeyList
 };
 

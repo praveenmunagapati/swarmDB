@@ -21,7 +21,7 @@ const buildRequest = changes => {
     const key = Object.keys(changes)[0];
     if (changes[key] === 'deleted') {
         return {
-            cmd: 'delete',
+            cmd: 'destroy',
             data:
                 {
                     key: key,

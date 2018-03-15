@@ -24,10 +24,11 @@ const clearEditingData = () => {
 
 export const save = () => {
     const changes = generateChanges();
-    console.log('changes in save service: ', changes)
+    console.log('changes in save service: ', changes);
+    // changes is an object with change key as key { 'thisobjchanged' }
     clearEditingData();
 
-    sendToNodes('sendDataToNode', changes);
+    sendToNodes('update', changes);
 
     removePreviousHistory();
     updateHistoryMessage(<span>Saved.</span>);

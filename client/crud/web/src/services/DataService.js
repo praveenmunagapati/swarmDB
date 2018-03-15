@@ -11,32 +11,42 @@ export const touch = key =>
                   : data.set(key, observable.map({ mostRecentTimestamp: new Date().getTime() }));
 
 
-addCommandProcessor('keyListUpdate', keys => keys.forEach(touch));
+addCommandProcessor('read', keys => keys.forEach(touch));
 
-addCommandProcessor('update', ({keys, bytearray = null}) => {
-    Object.keys(keys).forEach( key => touch(key));
-    if (bytearray) data.get(key).set('bytearray', new Uint8Array(bytearray));
+addCommandProcessor('update', ({key, bytearray = null}) => {
+    Object.keys(key).forEach( key => touch(key));
 
-    removePreviousHistory();
-    updateHistoryMessage(<span>Updated <code key={1}>{keys}</code> from node.</span>);
+    if (bytearray) {
+        data.get(key).set('bytearray', new Uint8Array(bytearray));
+        removePreviousHistory();
+        updateHistoryMessage(<span>Updated <code key={1}>{key}</code> from node.</span>);
+    }
+
 });
 
-
-addCommandProcessor('read', ({key, bytearray}) => {
-    touch(key);
-    data.get(key).set('bytearray', new Uint8Array(bytearray));
-
-
-    removePreviousHistory();
-    updateHistoryMessage(<span>Updated <code key={1}>{key}</code> from node.</span>);
-});
-
-addCommandProcessor('delete', key => {
+addCommandProcessor('delete', ({key}) => {
     data.delete(key);
 
     removePreviousHistory();
-    updateHistoryMessage(<span>Deleted keys <code key={1}>{JSON.stringify(keys)}</code> from node.</span>);
+    updateHistoryMessage(<span>Deleted keys <code key={1}>{JSON.stringify(key)}</code> from node.</span>);
 });
+
+// addCommandProcessor('update', ({keys, bytearray = null}) => {
+//     Object.keys(keys).forEach( key => touch(key));
+//     if (bytearray) data.get(key).set('bytearray', new Uint8Array(bytearray));
+//
+//     removePreviousHistory();
+//     updateHistoryMessage(<span>Updated <code key={1}>{keys}</code> from node.</span>);
+// });
+
+// addCommandProcessor('read', ({key, bytearray}) => {
+//     touch(key);
+//     data.get(key).set('bytearray', new Uint8Array(bytearray));
+//
+//
+//     removePreviousHistory();
+//     updateHistoryMessage(<span>Updated <code key={1}>{key}</code> from node.</span>);
+// });
 
 // addCommandProcessor('keyListUpdate', keys => keys.forEach(touch));
 

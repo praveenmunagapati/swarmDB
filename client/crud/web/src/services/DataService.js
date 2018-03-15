@@ -11,8 +11,7 @@ export const touch = key =>
                   : data.set(key, observable.map({ mostRecentTimestamp: new Date().getTime() }));
 
 addCommandProcessor('aggregate', (data, ws) => {
-    data.forEach( obj => {
-        const msg = JSON.stringify(obj);
+    data.forEach( msg => {
         receiveMessage(msg, ws);
     });
 });

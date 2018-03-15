@@ -17,7 +17,7 @@ addCommandProcessor('update', ({key, bytearray}) => {
     touch(key);
 
     if (bytearray) {
-        data.get(key).set('bytearray', new Uint8Array(bytearray));
+        data.get(key).set('bytearray', bytearray);
         removePreviousHistory();
         updateHistoryMessage(<span>Updated <code key={1}>{key}</code> from node.</span>);
     }

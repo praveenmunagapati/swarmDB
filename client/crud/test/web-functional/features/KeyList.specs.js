@@ -164,34 +164,16 @@ describe('KeyList functionality', () => {
 
     });
 
+    it('should be able to add and edit several new json keys', () => {
 
-    // Also fails under existing implementation.
+        newField('json1', 'JSON Data');
 
-    // it('should not be able to rename a key to another pre-existing keyname', () => {
-    //
-    //     browser.waitForExist('span*=textA');
-    //     browser.element('span=textA').click();
-    //
-    //     const rename = () =>
-    //         browser.keys(['textB', 'Enter']);
-    //
-    //     expect(rename).to.throw();
-    //
-    // });
+        setJSON('[1, 2, 3]');
 
+        newField('json2', 'JSON Data');
 
-    // Weird replication of old data for some reason.
+        setJSON('{ "hello": "world" }');
 
-    // it('should be able to add and edit several new json keys', () => {
-    //
-    //     newField('json1', 'JSON Data');
-    //
-    //     setJSON('[1, 2, 3]');
-    //
-    //     newField('json2', 'JSON Data');
-    //
-    //     setJSON('{ "hello": "world" }');
-    //
-    // });
+    });
 
 });

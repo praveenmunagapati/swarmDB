@@ -1,4 +1,4 @@
-import {start, setData} from "../emulator/Emulator";
+import {start, setData, getData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {findComponentsTest} from "react-functional-test";
 import {hasKey, hasNoKey, newField, remove, save, selectKey, setJSON, refresh} from "../pageActions";
@@ -144,36 +144,39 @@ describe('Multi-client functionality.', () => {
         hasKey('sometext');
 
     });
+    
+    it('should have a refresh button for object type', () => {
 
+        newField('json', 'JSON Data');
 
-    // This fails but it shouldn't
+        setJSON('{}');
 
-    // it.only('should have a refresh button for object type', () => {
-    //
-    //     newField('json', 'JSON Data');
-    //
-    //     setJSON('{}');
-    //
-    //     save();
-    //
-    //     browser.switchTab(secondWindow);
-    //
-    //     hasKey('json');
-    //
-    //     selectKey('json');
-    //
-    //     setJSON('[ 1, 2, "crazy text"]');
-    //
-    //     save();
-    //
-    //     browser.switchTab(firstWindow);
-    //
-    //     refresh('json');
-    //
-    //     browser.waitForExist('span*=crazy text');
-    //
-    // });
-    //
+        save();
+
+        browser.switchTab(secondWindow);
+
+        hasKey('json');
+
+        selectKey('json');
+
+        setJSON('[ 1, 2, "crazy text"]');
+
+        // console.log(getData().get('json').slice());
+        // browser.pause(5000);
+
+        save();
+
+        // console.log(getData().get('json').slice());
+        // browser.pause(10000);
+
+        browser.switchTab(firstWindow);
+
+        refresh('json');
+
+        browser.waitForExist('span*=crazy text');
+
+    });
+
 
     it('should have a refresh button for text type', () => {
 

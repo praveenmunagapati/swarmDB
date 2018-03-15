@@ -10,10 +10,19 @@ const mergeAndDelete = (val, key) =>
 
 module.exports = {
 
-    read: (obj, ws) => {
+    requestKeyList: (obj, ws) => {
         ws.send(JSON.stringify(
             {
                 cmd: 'read',
+                data: data.keys()
+            }
+        ))
+    },
+
+    read: (obj, ws) => {
+        ws.send(JSON.stringify(
+            {
+                cmd: 'update',
                 data:
                     {
                         key: obj.key,
@@ -23,16 +32,7 @@ module.exports = {
         ))
     },
 
-    requestKeyList: (obj, ws) => {
-        ws.send(JSON.stringify(
-            {
-                cmd: 'keyListUpdate',
-                data: data.keys()
-            }
-        ))
-    },
-
-    sendDataToNode: changes => forEach(changes, mergeAndDelete),
+    update: changes => forEach(changes, mergeAndDelete),
 
     getData: () => data,
     setData: obj => {
@@ -98,11 +98,10 @@ module.exports = {
 
 
 observe(data, (changes) => {
-    console.log('changes in datastore: ', changes);
-    console.log('changes.name in datastore: ', [changes.name]);
+    console.log('changes.name in datastore: ', changes.name);
     nodes.forEach(node => node.sendToClients({
         cmd: changes.type === 'delete' ? 'delete' : 'update',
-        data: [changes.name]
+        data: {key: changes.name}
     }));
 });
 

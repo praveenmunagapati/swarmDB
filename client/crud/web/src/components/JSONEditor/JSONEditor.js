@@ -17,7 +17,7 @@ export class JSONEditor extends Component {
 
         return {
             execute: args => this.context.execute({
-                onSave: this.onSave.bind(this, keyData.get('interpreted')), ...args })
+                onSave: () => this.onSave(keyData.get('interpreted')), ...args })
         };
     }
 

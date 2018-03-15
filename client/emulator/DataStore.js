@@ -13,6 +13,8 @@ module.exports = {
     requestKeyList: (obj, ws) => {
         ws.send(JSON.stringify(
             {
+                // Should be aggregated update
+
                 cmd: 'read',
                 data: data.keys()
             }

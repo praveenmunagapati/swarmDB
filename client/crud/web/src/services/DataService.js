@@ -11,7 +11,11 @@ export const touch = key =>
                   : data.set(key, observable.map({ mostRecentTimestamp: new Date().getTime() }));
 
 
-addCommandProcessor('read', keys => keys.forEach(touch));
+// Shouldn't exist
+// addCommandProcessor('read', keys => keys.forEach(touch));
+
+// + aggregate
+
 
 addCommandProcessor('update', ({key, bytearray}) => {
     touch(key);

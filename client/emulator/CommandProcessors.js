@@ -8,5 +8,7 @@ module.exports = {
         connection.send(JSON.stringify({cmd: 'updateNodes', data: getAllNodesInfo()})),
     read,
     update,
+    // delete
+    // aggregate
     requestKeyList
 };

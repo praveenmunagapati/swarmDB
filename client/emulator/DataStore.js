@@ -10,16 +10,22 @@ const mergeAndDelete = (val, key) =>
 
 module.exports = {
 
-    requestKeyList: (obj, ws) => {
-        ws.send(JSON.stringify(
-            {
-                // Should be aggregated update
 
-                cmd: 'read',
-                data: data.keys()
-            }
-        ))
-    },
+
+    // 1.
+    // Use the aggregate thing.
+
+
+    // requestKeyList: (obj, ws) => {
+    //     ws.send(JSON.stringify(
+    //         {
+    //             // Should be aggregated update
+    //
+    //             cmd: 'read',
+    //             data: data.keys()
+    //         }
+    //     ))
+    // },
 
     read: (obj, ws) => {
         ws.send(JSON.stringify(
@@ -34,7 +40,14 @@ module.exports = {
         ))
     },
 
-    update: changes => forEach(changes, mergeAndDelete),
+    update: obj => {
+        data.set(obj.key, obj.bytearray);
+    },
+
+    delete: obj => {
+        data.delete(obj.key);
+    },
+
 
     getData: () => data,
     setData: obj => {

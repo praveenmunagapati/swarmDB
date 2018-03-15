@@ -14,7 +14,13 @@ export const touch = key =>
 // Shouldn't exist
 // addCommandProcessor('read', keys => keys.forEach(touch));
 
+
 // + aggregate
+
+
+// Eventually uses CommandService/recieveMessage
+
+// addCommandProcessor('aggregate', ...)
 
 
 addCommandProcessor('update', ({key, bytearray}) => {

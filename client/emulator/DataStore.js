@@ -10,22 +10,20 @@ const mergeAndDelete = (val, key) =>
 
 module.exports = {
 
+    requestKeyList: (obj, ws) => {
+        var response = [];
 
+        data.keys().forEach( key =>
+            response.push({cmd: 'update', key: key})
+        );
 
-    // 1.
-    // Use the aggregate thing.
-
-
-    // requestKeyList: (obj, ws) => {
-    //     ws.send(JSON.stringify(
-    //         {
-    //             // Should be aggregated update
-    //
-    //             cmd: 'read',
-    //             data: data.keys()
-    //         }
-    //     ))
-    // },
+        ws.send(JSON.stringify(
+            {
+                cmd: 'aggregate',
+                data: response
+            }
+        ))
+    },
 
     read: (obj, ws) => {
         ws.send(JSON.stringify(

@@ -39,66 +39,10 @@ module.exports = {
         data.clear();
         data.merge(obj);
     }
-
-    // update: (obj, ws) => {
-    //     ws.send(JSON.stringify(
-    //         {
-    //             cmd: 'update',
-    //             data:
-    //                 {
-    //                     key: obj.key,
-    //                     bytearray: data.get(obj.key) || ''
-    //                 }
-    //         }
-    //     ))
-    // },
-    //
-    //
-    // // delete: (obj, ws) => {
-    // //
-    // // },
-    //
-    //
-    // aggregate: (objs, ws) => {
-    //     objs.data.forEach( obj => {
-    //         ws.send(JSON.stringify(
-    //             {
-    //                 cmd: obj.cmd,
-    //                 data:
-    //                     {
-    //                         key: obj.key,
-    //                         bytearray: data.get(obj.key) || ''
-    //                     }
-    //             }
-    //         ))
-    //     })
-    // },
-
-
-
-    // requestBytearray: (obj, ws) =>
-    //     ws.send(JSON.stringify(
-    //         {
-    //             cmd: 'bytearrayUpdate',
-    //             data: {
-    //                 key: obj.key,
-    //                 bytearray: data.get(obj.key)
-    //             }
-    //         })),
-    //
-
-    // requestKeyList: (obj, ws) =>
-    //     ws.send(JSON.stringify(
-    //         {
-    //             cmd: 'keyListUpdate',
-    //             data: data.keys()
-    //         })),
-
 };
 
 
 observe(data, (changes) => {
-    console.log('changes.name in datastore: ', changes.name);
     nodes.forEach(node => node.sendToClients({
         cmd: changes.type === 'delete' ? 'delete' : 'update',
         data: {key: changes.name}

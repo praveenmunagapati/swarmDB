@@ -14,8 +14,6 @@ export class Editor extends Component {
 
     loadData() {
         sendToNodes('read', {key: selectedKey.get()});
-        console.log('loadData, selected key: ', selectedKey.get());
-        // sendToNodes('requestBytearray', {key: selectedKey.get()});
     }
 
     render() {

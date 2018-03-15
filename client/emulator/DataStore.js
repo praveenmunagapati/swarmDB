@@ -14,7 +14,7 @@ module.exports = {
         var response = [];
 
         data.keys().forEach( key =>
-            response.push({cmd: 'update', key: key})
+            response.push({cmd: 'update', data: {key: key}})
         );
 
         ws.send(JSON.stringify(

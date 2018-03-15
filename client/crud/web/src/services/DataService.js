@@ -1,4 +1,4 @@
-import {addCommandProcessor} from "bluzelle-client-common/services/CommandService";
+import {addCommandProcessor, receiveMessage} from "bluzelle-client-common/services/CommandService";
 import {mapValues} from 'lodash';
 import {removePreviousHistory, updateHistoryMessage} from './CommandQueueService';
 
@@ -10,18 +10,12 @@ export const touch = key =>
     data.has(key) ? data.get(key).set('mostRecentTimestamp', new Date().getTime())
                   : data.set(key, observable.map({ mostRecentTimestamp: new Date().getTime() }));
 
-
-// Shouldn't exist
-// addCommandProcessor('read', keys => keys.forEach(touch));
-
-
-// + aggregate
-
-
-// Eventually uses CommandService/recieveMessage
-
-// addCommandProcessor('aggregate', ...)
-
+addCommandProcessor('aggregate', (data, ws) => {
+    data.forEach( obj => {
+        const msg = JSON.stringify(obj);
+        receiveMessage(msg, ws);
+    });
+});
 
 addCommandProcessor('update', ({key, bytearray}) => {
     touch(key);

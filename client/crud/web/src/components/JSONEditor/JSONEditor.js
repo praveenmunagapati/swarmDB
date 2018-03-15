@@ -7,6 +7,7 @@ import {enableExecution, enableExecutionForChildren} from "../../services/Comman
 
 export const PREFIX = 0;
 
+@observer
 @enableExecution
 @enableExecutionForChildren
 export class JSONEditor extends Component {
@@ -27,18 +28,24 @@ export class JSONEditor extends Component {
     }
 
     interpret() {
-        const {keyData} = this.props;
+        setTimeout(() => {
+            const {keyData} = this.props;
 
-        if(!keyData.has('interpreted')) {
-            keyData.set('interpreted', omr(interpret(getRaw(keyData))));
-            keyData.set('beginEditingTimestamp', new Date().getTime());
-        }
+            if (!keyData.has('interpreted')) {
+                keyData.set('interpreted', omr(interpret(getRaw(keyData))));
+                keyData.set('beginEditingTimestamp', new Date().getTime());
+            }
+        });
     }
 
     render() {
         const {keyData} = this.props;
 
-        this.interpret();
+
+        if(!keyData.has('interpreted')) {
+            this.interpret();
+            return <div>Interpreting...</div>;
+        }
 
         return <RenderTree obj={keyData} propName='interpreted' isRoot={true}/>
     }

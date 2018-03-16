@@ -17,26 +17,30 @@ const addChangesFromCommand = (changes, command) =>
 const generateChanges = () =>
     reduce(commandsToSave(), addChangesFromCommand, {});
 
-const buildRequest = changes => {
-    const key = Object.keys(changes)[0];
-    if (changes[key] === 'deleted') {
-        return {
-            cmd: 'destroy',
-            data:
-                {
-                    key: key,
-                }
+const buildRequests = changes => {
+    const requests = [];
+
+    Object.keys(changes).forEach( key => {
+        if (changes[key] === 'deleted') {
+            requests.push({
+                cmd: 'destroy',
+                data:
+                    {
+                        key: key,
+                    }
+            });
+        } else {
+            requests.push({
+                cmd: 'update',
+                data:
+                    {
+                        key: key,
+                        bytearray: changes[key]
+                    }
+            });
         }
-    } else {
-        return {
-            cmd: 'update',
-            data:
-                {
-                    key: key,
-                    bytearray: changes[key]
-                }
-        }
-    }
+    });
+    return requests;
 };
 
 const clearEditingData = () => {
@@ -46,11 +50,11 @@ const clearEditingData = () => {
 
 export const save = () => {
     const changes = generateChanges();
-    const request = buildRequest(changes);
+    const requests = buildRequests(changes);
 
     clearEditingData();
 
-    sendToNodes(request.cmd, request.data);
+    sendToNodes('aggregate', requests);
 
     removePreviousHistory();
     updateHistoryMessage(<span>Saved.</span>);

@@ -206,6 +206,33 @@ describe('Multi-client functionality.', () => {
     });
 
 
+    it.only('should be able to delete two keys', () => {
+
+        newField('A', 'JSON');
+        newField('B', 'JSON');
+
+        save();
+
+        browser.switchTab(secondWindow);
+
+        hasKey('A');
+        hasKey('B');
+
+        remove('A');
+        remove('B');
+
+        save();
+
+        browser.switchTab(firstWindow);
+
+        browser.waitForExist('button*=A', 500, true);
+        browser.waitForExist('button*=B', 500, true);
+
+    });
+
+
+
+
     // Doesn't overwrite old file on save.
 
 

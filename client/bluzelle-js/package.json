@@ -1,0 +1,16 @@
+{
+  "name": "bluzelle",
+  "version": "0.0.1",
+  "description": "Bluzelle Database for JavaScript",
+  "main": "api.js",
+  "scripts": {
+    "test": "chimp --mocha"
+  },
+  "devDependencies": {},
+  "author": "Monty Thibault, John Lam",
+  "license": "ISC",
+  "dependencies": {
+    "chimp": "^0.51.1",
+    "mocha": "^5.0.4"
+  }
+}

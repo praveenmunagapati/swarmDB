@@ -29,12 +29,26 @@ const connect = addr => {
     s.onclose = () => connections.delete(s);
     s.onerror = () => s.close();
 
-    s.onmessage = () => onMessage(s);
+    s.onmessage = e => onMessage(e, s);
 
 };
 
-const onMessage = socket =>
-    null;
+
+const onMessage = (event, socket) =>
+    command(JSON.parse(ev.data), socket);
+
+
+const command = (obj, socket) => {
+
+    obj.cmd === 'aggregate' && aggregate(obj, socket);
+    obj.cmd === 'update' && onUpdate(obj, socket);
+    obj.cmd === 'destroy'  && onDestroy(obj, socket);
+
+};
+
+const aggregate = (obj, socket) =>
+    obj.data.forEach(cmd => command(cmd, socket));
+
 
 const disconnect = () => {
     for(let connection of connections.values()) {
@@ -42,20 +56,35 @@ const disconnect = () => {
     }
 };
 
-const update = (key, value) =>
-    null;
+const send = (cmd, data) => {
+    for(let connection of connections.values()) {
+        connection.send(JSON.parse({cmd, data}));
+    }
+};
 
-const remove = key =>
-    null;
+const update = (key, value) =>
+    send('update', {
+        key,
+        value
+    });
+
+const destroy = key =>
+    send('destroy', {key});
 
 const read = key =>
-    null;
+    send('read', {key});
 
 
 module.exports = {
     connect,
     disconnect,
+
     read,
     update,
-    remove
+    destroy,
+
+    onUpdate,
+    onDestroy
 };
+
+

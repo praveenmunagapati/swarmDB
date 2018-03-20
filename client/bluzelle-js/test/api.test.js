@@ -24,6 +24,7 @@ describe('bluzelle connection', () => {
 
     it('should be able to connect to 8100', () => {});
 
+
     it('should be able to ping the connection', async => {
 
         return api.ping();

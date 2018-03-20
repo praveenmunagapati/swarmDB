@@ -1,7 +1,7 @@
 import {start, setData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {findComponentsTest} from "react-functional-test";
-import {newField, setJSON} from "../pageActions";
+import {newField, setJSON, save, selectKey} from "../pageActions";
 
 describe('KeyList functionality', () => {
 
@@ -175,5 +175,28 @@ describe('KeyList functionality', () => {
         setJSON('{ "hello": "world" }');
 
     });
+
+    // Values for first object is saved onto last selected object.
+    // If given new values (ball/leather), it overwrites previous values (stick/wood)
+    //
+    // it('should be able to update two objects at once', () => {
+    //
+    //     newField('hockey', 'JSON Data');
+    //     newField('soccer', 'JSON Data');
+    //
+    //     save();
+    //
+    //     selectKey('hockey');
+    //     setJSON('{"stick": "wood"}');
+    //
+    //     selectKey('soccer');
+    ////   setJSON('{"ball": "leather"}');
+    //
+    //     save();
+    //
+    //     selectKey('hockey');
+    //
+    //     browser.waitForExist('span*=stick');
+    // });
 
 });

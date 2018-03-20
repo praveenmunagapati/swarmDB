@@ -37,6 +37,7 @@ export const setJSON = json => {
 
     browser.moveToObject('span*=(0 entries)');
     browser.element('.glyphicon-pencil').click();
+    browser.waitForExist('input');
 
     browser.setValue('input', json);
     browser.submitForm('input');

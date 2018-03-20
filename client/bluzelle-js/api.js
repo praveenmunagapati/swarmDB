@@ -21,6 +21,11 @@ const WebSocket = require('isomorphic-ws');
 const connections = new Set();
 
 
+const ping = () => new Promise(resolve => {
+     
+});
+
+
 const connect = addr => {
 
     const s = new WebSocket(addr);
@@ -35,19 +40,7 @@ const connect = addr => {
 
 
 const onMessage = (event, socket) =>
-    command(JSON.parse(ev.data), socket);
-
-
-const command = (obj, socket) => {
-
-    obj.cmd === 'aggregate' && aggregate(obj, socket);
-    obj.cmd === 'update' && onUpdate(obj, socket);
-    obj.cmd === 'destroy'  && onDestroy(obj, socket);
-
-};
-
-const aggregate = (obj, socket) =>
-    obj.data.forEach(cmd => command(cmd, socket));
+    null;
 
 
 const disconnect = () => {
@@ -62,29 +55,47 @@ const send = (cmd, data) => {
     }
 };
 
-const update = (key, value) =>
+
+const update = (key, value) => new Promise(resolve => {
+
     send('update', {
         key,
         value
     });
 
-const destroy = key =>
-    send('destroy', {key});
+});
 
-const read = key =>
+
+const delet = key => new Promise(resolve => {
+
+    send('delete', {key});
+
+});
+
+
+const read = key => new Promise(resolve => {
+
     send('read', {key});
+
+});
+
+
+const has = key => new Promise(resolve => {
+
+    send('has', {key});
+
+});
 
 
 module.exports = {
     connect,
     disconnect,
+    ping,
 
     read,
     update,
-    destroy,
-
-    onUpdate,
-    onDestroy
+    'delete': delet, // delete is a reserved keyword
+    has
 };
 
 

@@ -22,14 +22,6 @@ describe('bluzelle connection', () => {
         api.disconnect());
 
 
-    it('should be able to connect to 8100', () => {});
-
-
-    it('should be able to ping the connection', async => {
-
-        return api.ping();
-
-    });
 
     it('should be able to create and read number fields', async () => {
 
@@ -79,12 +71,5 @@ describe('bluzelle connection', () => {
         assert((await api.delete('something')).error);
 
     });
-
-});
-
-
-describe('multiple client tests', () => {
-
-
 
 });

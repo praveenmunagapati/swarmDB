@@ -14,19 +14,8 @@ const toPlainArray = typedArr => Array.from(typedArr);
 const commandsToSave = () =>
     commandQueue.slice(0, currentPosition.get() + 1);
 
-const addChangesFromCommand = (changes, command) => {
-    const x = command.onSave(changes);
-
-    if(isObservableArray(x)) {
-        debugger;
-        console.log('command returns observable array');
-    }
-
-    console.log(x);
-
-
-    return extend(changes, x);
-};
+const addChangesFromCommand = (changes, command) =>
+    extend(changes, command.onSave(changes));
 
 const generateChanges = () => 
     reduce(commandsToSave(), addChangesFromCommand, {});

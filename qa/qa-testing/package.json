@@ -5,6 +5,7 @@
     "run-web-functional-tests-watch": "cd test/admin/web-functional; ../../../node_modules/.bin/chimp --mocha --watch",
     "run-web-functional-ci": "cd test/admin/web-functional; ../../../node_modules/.bin/chimp --browser=phantomjs --mocha",
     "run-daemon-tests": "cd test/daemon; ../../node_modules/.bin/chimp --browser=phantomjs --mocha",
+    "run-daemon": "./tests/functional/run-daemon.sh",
     "chimp-kill": "./tests/functional/kill-chimp.sh"
   },
   "dependencies": {

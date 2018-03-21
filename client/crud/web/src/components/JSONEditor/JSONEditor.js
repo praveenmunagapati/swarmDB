@@ -5,6 +5,9 @@ import {observableMapRecursive as omr} from "../../util/mobXUtils";
 import {arrayToStr, strToArray} from "../../util/encoding";
 import {enableExecution, enableExecutionForChildren} from "../../services/CommandQueueService";
 
+import {isObservable} from 'mobx';
+
+
 export const PREFIX = 0;
 
 @observer
@@ -15,6 +18,9 @@ export class JSONEditor extends Component {
     getChildContext() {
         const {keyData} = this.props;
 
+
+        console.log('getChildContext() is being called', this.props.keyName);
+
         return {
             execute: args => this.context.execute({
                 onSave: () => this.onSave(keyData.get('interpreted')), ...args })
@@ -22,6 +28,9 @@ export class JSONEditor extends Component {
     }
 
     onSave(interpreted) {
+
+        console.log('onSave keyname:', this.props.keyName);
+
         return {
             [this.props.keyName]: addPrefix(serialize(interpreted), PREFIX).slice()
         };

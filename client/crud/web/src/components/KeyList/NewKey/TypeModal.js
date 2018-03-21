@@ -25,7 +25,7 @@ export class TypeModal extends Component {
     addNewKey(keyData, typeName) {
         const {obj, keyField} = this.props;
         const oldSelection = selectedKey.get();
-        const serial = keyData.get('bytearray');
+        const serial = keyData.get('bytearray').slice();
 
         this.context.execute({
             doIt: () => {

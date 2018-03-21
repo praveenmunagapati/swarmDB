@@ -3,6 +3,9 @@ import {commandQueue, currentPosition, removePreviousHistory, updateHistoryMessa
 import {sendToNodes} from "bluzelle-client-common/services/CommunicationService";
 import {mapValues, extend, reduce} from 'lodash';
 
+import {isObservableArray} from 'mobx';
+
+
 const toSerializable = v =>
     v === 'deleted' ? v : toPlainArray(v);
 
@@ -11,16 +14,27 @@ const toPlainArray = typedArr => Array.from(typedArr);
 const commandsToSave = () =>
     commandQueue.slice(0, currentPosition.get() + 1);
 
-const addChangesFromCommand = (changes, command) =>
-    extend(changes, command.onSave(changes));
+const addChangesFromCommand = (changes, command) => {
+    const x = command.onSave(changes);
 
-const generateChanges = () =>
+    if(isObservableArray(x)) {
+        debugger;
+        console.log('command returns observable array');
+    }
+
+    console.log(x);
+
+
+    return extend(changes, x);
+};
+
+const generateChanges = () => 
     reduce(commandsToSave(), addChangesFromCommand, {});
 
 const buildRequests = changes => {
     const requests = [];
 
-    Object.keys(changes).forEach( key => {
+    Object.keys(changes).forEach(key => {
         if (changes[key] === 'deleted') {
             requests.push({
                 cmd: 'destroy',
@@ -49,7 +63,9 @@ const clearEditingData = () => {
 };
 
 export const save = () => {
+
     const changes = generateChanges();
+
     const requests = buildRequests(changes);
 
     clearEditingData();

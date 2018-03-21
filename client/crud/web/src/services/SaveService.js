@@ -11,13 +11,8 @@ const toPlainArray = typedArr => Array.from(typedArr);
 const commandsToSave = () =>
     commandQueue.slice(0, currentPosition.get() + 1);
 
-const addChangesFromCommand = (changes, command) => {
-
-    console.log('command', command, 'onsave', command.onSave(changes));
-
-    return extend(changes, command.onSave(changes));
-
-};
+const addChangesFromCommand = (changes, command) =>
+    extend(changes, command.onSave(changes));
 
 const generateChanges = () =>
     reduce(commandsToSave(), addChangesFromCommand, {});
@@ -55,9 +50,6 @@ const clearEditingData = () => {
 
 export const save = () => {
     const changes = generateChanges();
-
-    console.log('changes', changes);
-
     const requests = buildRequests(changes);
 
     clearEditingData();

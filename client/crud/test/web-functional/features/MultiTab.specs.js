@@ -145,7 +145,7 @@ describe('Multi-client functionality.', () => {
 
     });
     
-    it.only('should have a refresh button for object type', () => {
+    it('should have a refresh button for object type', () => {
 
         newField('json', 'JSON Data');
 
@@ -161,13 +161,7 @@ describe('Multi-client functionality.', () => {
 
         setJSON('[ 1, 2, "crazy text"]');
 
-        // console.log(getData().get('json').slice());
-        // browser.pause(5000);
-
         save();
-
-        // console.log(getData().get('json').slice());
-        // browser.pause(10000);
 
         browser.switchTab(firstWindow);
 

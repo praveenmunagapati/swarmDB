@@ -45,5 +45,9 @@ export const setJSON = json => {
 };
 
 
-export const refresh = name =>
+export const refresh = name => {
+
+    browser.waitForExist('.glyphicon-refresh');
     browser.element('.glyphicon-refresh').click();
+
+};

@@ -23,7 +23,7 @@ export class JSONEditor extends Component {
 
     onSave(interpreted) {
         return {
-            [this.props.keyName]: addPrefix(serialize(interpreted), PREFIX)
+            [this.props.keyName]: addPrefix(serialize(interpreted.slice()), PREFIX)
         };
     }
 

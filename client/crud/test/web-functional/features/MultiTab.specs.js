@@ -145,7 +145,7 @@ describe('Multi-client functionality.', () => {
 
     });
     
-    it('should have a refresh button for object type', () => {
+    it.only('should have a refresh button for object type', () => {
 
         newField('json', 'JSON Data');
 
@@ -206,7 +206,7 @@ describe('Multi-client functionality.', () => {
     });
 
 
-    it.only('should be able to delete two keys', () => {
+    it('should be able to delete two keys', () => {
 
         newField('A', 'JSON');
         newField('B', 'JSON');

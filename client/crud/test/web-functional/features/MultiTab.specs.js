@@ -206,7 +206,7 @@ describe('Multi-client functionality.', () => {
     });
 
 
-    it.only('should be able to delete two keys', () => {
+    it('should be able to delete two keys', () => {
 
         newField('A', 'JSON');
         newField('B', 'JSON');

@@ -21,8 +21,6 @@ addCommandProcessor('update', ({key, bytearray}) => {
 
     if (bytearray) {
         data.get(key).set('bytearray', bytearray);
-        removePreviousHistory();
-        updateHistoryMessage(<span>Updated <code key={1}>{key}</code> from node.</span>);
     }
 });
 

@@ -16,7 +16,7 @@ it('should be able to reset', () => {});
 describe('bluzelle connection', () => {
 
     beforeEach(() =>
-        communication.connect('localhost:8100'));
+        communication.connect('ws://localhost:8100'));
 
     afterEach(() =>
         communication.disconnect());
@@ -25,7 +25,7 @@ describe('bluzelle connection', () => {
     it('should be able to connect to 8100', () => {});
 
 
-    it('should be able to ping the connection', async () => {
+    it.only('should be able to ping the connection', async () => {
 
         return communication.ping();
 

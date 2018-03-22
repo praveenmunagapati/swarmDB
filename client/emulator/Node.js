@@ -57,10 +57,6 @@ module.exports = function Node(port) {
     }));
 
     me.getHttpServer().listen(port, () => {
-
-        debugger;
-
-
         // Disable logging on chimp tests by default
         // Can be overridden with 'emulatorVerbose'.
         (process.env['chimp._'] || process.env['emulatorQuiet'])
@@ -77,7 +73,7 @@ module.exports = function Node(port) {
         connections.push(connection);
         connection.on('message', ({utf8Data: message}) => {
             const command = JSON.parse(message);
-            CommandProcessors[command.cmd](command.data, connection);
+            CommandProcessors[command.cmd](command, connection);
         });
     });
 

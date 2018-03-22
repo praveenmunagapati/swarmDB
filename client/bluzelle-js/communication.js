@@ -24,23 +24,45 @@ const resolvers = new Map();
 
 const ping = () => new Promise(resolve => {
 
+    send({
+        cmd: 'ping',
+        'bzn-api': 'ping'
+    }, obj => resolve());
+
 });
 
 
 const connect = addr => {
 
-    const s = new WebSocket(addr);
+    return new Promise(resolve => {
 
-    s.onopen = () => connections.add(s);
-    s.onclose = () => connections.delete(s);
-    s.onerror = () => s.close();
+        const s = new WebSocket(addr);
 
-    s.onmessage = e => onMessage(e, s);
+        s.onopen = () => {
+
+            connections.add(s);
+            resolve(s);
+
+        };
+
+        s.onclose = () => connections.delete(s);
+        s.onerror = e =>  {
+
+            s.close();
+            console.error(e);
+
+        }
+
+        s.onmessage = e => onMessage(JSON.parse(e.data), s);
+
+    });
 
 };
 
 
 const onMessage = (event, socket) => {
+
+    debugger;
 
     resolvers.get(event.response_to)(event);
     resolvers.delete(event.response_to);
@@ -74,34 +96,29 @@ const amendRequestID = (() => {
 })();
 
 
-const send = obj => {
+const send = (obj, resolver) => {
 
-    const message = () =>
-        JSON.parse(
-            amendRequestID(
-                amendBznApi(obj)
-            )
-        );
+    const message = amendRequestID(obj);
 
+    resolvers.set(message.request_id, resolver);
 
     for(let connection of connections.values()) {
-        connection.send(message);
+        connection.send(JSON.stringify(message));
     }
-
-    return message;
-
 };
 
 
 const update = (key, value) => new Promise((resolve, reject) => {
 
-    const message = send({
+    const cmd = amendBznApi({
         cmd: 'update',
         data: {
-            key,
-            value
+            key, value
         }
     });
+
+
+    const message = send(cmd);
 
 
     resolvers.set(message.request_id, obj =>
@@ -112,12 +129,14 @@ const update = (key, value) => new Promise((resolve, reject) => {
 
 const delet = key => new Promise(resolve => {
 
-    const message = send({
+    const cmd = amendBznApi({
         cmd: 'delete',
         data: {
             key
         }
     });
+
+    const message = send(cmd);
 
 
     resolvers.set(message.request_id, obj =>
@@ -128,12 +147,15 @@ const delet = key => new Promise(resolve => {
 
 const read = key => new Promise(resolve => {
 
-    const message = send({
+    const cmd = amendBznApi({
         cmd: 'read',
         data: {
             key
         }
     });
+
+
+    const message = send(cmd);
 
 
     resolvers.set(message.request_id, obj =>
@@ -144,12 +166,14 @@ const read = key => new Promise(resolve => {
 
 const has = key => new Promise(resolve => {
 
-    const message= send({
+    const cmd = amendBznApi({
         cmd: 'has',
         data: {
             key
         }
     });
+
+    const message= send(cmd);
 
 
     resolvers.set(message.request_id, resolve);

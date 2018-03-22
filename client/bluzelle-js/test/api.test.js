@@ -16,7 +16,7 @@ it('should be able to reset', () => {});
 describe('bluzelle connection', () => {
 
     beforeEach(() =>
-        api.connect('localhost:8100'));
+        api.connect('ws://localhost:8100'));
 
     afterEach(() =>
         api.disconnect());

@@ -12,6 +12,7 @@
     "async-wait-until": "^1.1.5",
     "chai": "^4.1.2",
     "chimp": "^0.51.0",
+    "filereader": "^0.10.3",
     "lodash": "^4.17.4",
     "mocha": "^4.0.1",
     "nyc": "^11.2.1",

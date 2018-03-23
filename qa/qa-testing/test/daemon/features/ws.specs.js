@@ -1,15 +1,17 @@
-const WebSocket = require('ws');
-const waitUntil = require('async-wait-until');
-const get = require('lodash/get');
-const cmd = require('node-cmd');
+import WebSocket from 'ws';
+import waitUntil from 'async-wait-until';
+import {get} from 'lodash';
+import cmd from 'node-cmd';
+import {logFileExists, logFileMoved} from '../utils.js';
 
-let socket, messages;
+let socket, messages, logFileName;
 
 describe('web sockets interface', () => {
 
-    beforeEach((done) => {
-        cmd.run('cd ../../; yarn run-daemon'); // Working directory originates to where Chimp is called)
-        browser.pause(500);
+    beforeEach( async done => {
+        cmd.run('cd ../../; yarn run-daemon');
+        await waitUntil(() => logFileName = logFileExists());
+
         messages = [];
         socket = new WebSocket('ws://localhost:49152');
         socket.on('open', done);
@@ -23,8 +25,9 @@ describe('web sockets interface', () => {
         })
     });
 
-    afterEach(() => {
+    afterEach( async () => {
         socket.close();
         cmd.run('cd ../../; yarn daemon-kill');
+        await waitUntil( () => logFileMoved(logFileName));
     });
 });

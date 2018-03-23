@@ -6,6 +6,7 @@
     "run-web-functional-ci": "cd test/admin/web-functional; ../../../node_modules/.bin/chimp --browser=phantomjs --mocha",
     "run-daemon-tests": "cd test/daemon; ../../node_modules/.bin/chimp --browser=phantomjs --mocha",
     "run-daemon": "./tests/functional/run-daemon.sh",
+    "daemon-kill": "pkill -2 swarm",
     "chimp-kill": "./tests/functional/kill-chimp.sh"
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "filereader": "^0.10.3",
     "lodash": "^4.17.4",
     "mocha": "^4.0.1",
+    "node-cmd": "^3.0.0",
     "nyc": "^11.2.1",
     "phantomjs-polyfill": "^0.0.2",
     "request": "^2.83.0",

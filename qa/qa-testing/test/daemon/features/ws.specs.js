@@ -1,12 +1,15 @@
 const WebSocket = require('ws');
 const waitUntil = require('async-wait-until');
 const get = require('lodash/get');
+const cmd = require('node-cmd');
 
 let socket, messages;
 
 describe('web sockets interface', () => {
 
     beforeEach((done) => {
+        cmd.run('cd ../../; yarn run-daemon'); // Working directory originates to where Chimp is called)
+        browser.pause(500);
         messages = [];
         socket = new WebSocket('ws://localhost:49152');
         socket.on('open', done);
@@ -20,5 +23,8 @@ describe('web sockets interface', () => {
         })
     });
 
-    afterEach(() => socket.close());
+    afterEach(() => {
+        socket.close();
+        cmd.run('cd ../../; yarn daemon-kill');
+    });
 });

@@ -1,35 +1,32 @@
-// import {exec} from 'child_process';
-const { exec } = require('child_process');
-import waitUntil from 'async-wait-until';
-import {logFileExists, logFileMoved} from '../utils.js';
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 import {PATH_TO_DAEMON} from './00-setup';
 import {filter, includes} from 'lodash';
 
 
-let logFileName, capture;
-
-describe('cmd line',() => {
+describe('cmd line', () => {
 
     describe('accepts flags', () => {
-        it.only('-h', () => {
-            // browser.pause(500);
-
-
-            exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -h`, (error, stdout, stderr) => capture = stdout);
-            browser.pause(200);
-
-            console.log('capture: ', capture);
-            expect(capture).to.have.string('Shows this information');
+        it('-h', async () => {
+            await testStdOut(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -h`, 'Shows this information');
         });
 
+        it('-v', async () => {
+            await testStdOut(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -v`, 'Bluzelle:');
+        });
+
+        // it('-c', async () => {
+        //     await testStdOut(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -c`, 'is missing');
+        // });
+
+        // it.only('no flags', async () => {
+        //     await testStdOut(`cd ${PATH_TO_DAEMON}/daemon; ./swarm`, 'Running node');
+        // });
+
     });
-
-    // describe('loads ./bluzelle.json as default config file', async () => {
-    //     cmd.run(`cd ${PATH_TO_DAEMON}; ./swarm`);
-    //     await waitUntil(() => logFileName = logFileExists());
-    // });
-    //
-    // describe('accepts -l -a -p ', () => {
-    // });
-
 });
+
+async function testStdOut(cmd, expected) {
+    const {stdout, stderr} = await exec(cmd);
+    expect(stdout).to.have.string(expected);
+}

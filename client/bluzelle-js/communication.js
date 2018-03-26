@@ -1,21 +1,3 @@
-//
-// Library interactions (ES5)
-// ====================
-// // Wraps websocket communcations
-// // Keeps a cache
-// import * from 'bluzelle/communication';
-// connect('ws://127.0.0.1:3000');
-// read(key)  // Returns promise
-// update(key, bytearray)
-// delete(key)
-// keys()     // Returns promise
-// disconnect();
-// // Translates from bytearrays to JS objects
-// import * from 'bluzelle/api';
-// update(key, string)
-// update(key, json)
-// update(key, binary file)
-
 const WebSocket = require('isomorphic-ws');
 
 const connections = new Set();
@@ -61,8 +43,6 @@ const connect = addr => {
 
 
 const onMessage = (event, socket) => {
-
-    debugger;
 
     resolvers.get(event.response_to)(event);
     resolvers.delete(event.response_to);
@@ -117,17 +97,13 @@ const update = (key, value) => new Promise((resolve, reject) => {
         }
     });
 
-
-    const message = send(cmd);
-
-
-    resolvers.set(message.request_id, obj =>
-        obj.hasKey('error') ? reject(obj.error) : resolve());
+    send(cmd, obj =>
+        obj.error ? resolve(new Error(obj.error)) : resolve());
 
 });
 
 
-const delet = key => new Promise(resolve => {
+const delet = key => new Promise((resolve, reject) => {
 
     const cmd = amendBznApi({
         cmd: 'delete',
@@ -136,16 +112,14 @@ const delet = key => new Promise(resolve => {
         }
     });
 
-    const message = send(cmd);
 
-
-    resolvers.set(message.request_id, obj =>
-        obj.hasKey('error') ? reject(obj.error) : resolve());
+    send(cmd, obj =>
+        obj.error ? resolve(new Error(obj.error)) : resolve());
 
 });
 
 
-const read = key => new Promise(resolve => {
+const read = key => new Promise((resolve, reject) => {
 
     const cmd = amendBznApi({
         cmd: 'read',
@@ -155,11 +129,8 @@ const read = key => new Promise(resolve => {
     });
 
 
-    const message = send(cmd);
-
-
-    resolvers.set(message.request_id, obj =>
-        obj.hasKey('error') ? reject(obj.error) : resolve(obj.data.value));
+    send(cmd, obj =>
+        obj.error ? resolve(new Error(obj.error)) : resolve(obj.data.value));
 
 });
 
@@ -173,10 +144,8 @@ const has = key => new Promise(resolve => {
         }
     });
 
-    const message= send(cmd);
 
-
-    resolvers.set(message.request_id, resolve);
+    send(cmd, obj => resolve(obj.data.value));
 
 });
 

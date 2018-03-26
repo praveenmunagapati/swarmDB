@@ -1,5 +1,5 @@
 const {maxNodes} = require('./Values');
-const {read, update, destroy, requestKeyList} = require('./DataStore');
+const {read, update, delete:delet, has} = require('./DataStore');
 const {getAllNodesInfo} = require('./NodeStore.js');
 
 
@@ -11,7 +11,13 @@ const CommandProcessors = {
     ping: ({request_id}, ws) => 
         ws.send(JSON.stringify({
             response_to: request_id
-        }))
+        })),
+
+    read,
+    update,
+    'delete': delet,
+    has
+
 };
 
 

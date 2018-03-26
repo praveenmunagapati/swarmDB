@@ -10,10 +10,7 @@ beforeEach(() => {
 });
 
 
-it('should be able to reset', () => {});
-
-
-describe('bluzelle connection', () => {
+describe('bluzelle api', () => {
 
     beforeEach(() =>
         api.connect('ws://localhost:8100'));
@@ -41,34 +38,6 @@ describe('bluzelle connection', () => {
 
         await api.update('myObjKey', { a: 5 });
         assert((await api.read('myObjKey')).a === 5);
-
-    });
-
-    it('should be able to query if the database has a key', async () => {
-
-        await api.update('myKey', 123);
-        assert(await api.has('myKey'));
-        assert(!await api.has('someOtherKey'));
-
-    });
-
-    it('should be able to delete a key', async () => {
-
-        await api.update('myKey');
-        await api.delete('myKey');
-        assert(!await api.has('myKey'));
-
-    });
-
-    it('should throw an error when trying to read a non-existent key', async () => {
-
-        assert((await api.read('something')).error);
-
-    });
-
-    it('should throw an error when trying to delete a non-existent key', async () => {
-
-        assert((await api.delete('something')).error);
 
     });
 

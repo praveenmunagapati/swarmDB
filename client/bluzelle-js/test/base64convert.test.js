@@ -55,39 +55,20 @@ describe.only('base64 convert', () => {
 	});
 
 
+	it('should convert bytearray data', () => {
 
-
-	// Only works in browser?
-	
-	function fileFromArrayBuffer(arr) {
-		return new Blob([arr], {type: 'application/octet-binary'});
-	}
-
-
-	function fileToArrayBuffer(file) {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.readAsArrayBuffer(file);
-			reader.onload = () => resolve(reader.result);
-			reader.onerror = error => reject(error);
-		});
-	}
-
-
-	it('should convert serial data', () => {
+		debugger;
 
 		const arr = new Uint8Array([1, 2, 3]);
-		const file = fileFromArrayBuffer(arr);
 
-		const str = valToBase64(file);
+		const str = valToBase64(arr);
 
 		assert(typeof str === typeof '');
 
+		const arr2 = base64ToVal(str);
 
-		const file2 = base64ToVal(str);
-		const arr2 = fileToArrayBuffer(file2);
-
-		assert(isEqual(arr, arr2));
+		assert(arr2 instanceof ArrayBuffer);
+		assert(isEqual(arr, new Uint8Array(arr2)));
 
 	});
 

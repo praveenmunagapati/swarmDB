@@ -44,6 +44,8 @@ const connect = addr => {
 
 const onMessage = (event, socket) => {
 
+    debugger;
+
     resolvers.get(event.response_to)(event);
     resolvers.delete(event.response_to);
 

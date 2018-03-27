@@ -3,7 +3,7 @@ const communication = require('../communication');
 const assert = require('assert');
 
 
-beforeEach(() => { reset() });
+beforeEach(reset);
 
 
 it('should be able to reset', () => {});

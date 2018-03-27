@@ -3,7 +3,7 @@ const api = require('../api');
 const assert = require('assert');
 
 
-beforeEach(() => { reset() });
+beforeEach(reset);
 
 
 describe('bluzelle api', () => {

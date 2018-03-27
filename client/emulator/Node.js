@@ -30,11 +30,12 @@ module.exports = function Node(port) {
             nodes.delete(port);
             sendToClients('removeNodes', [me.address]);
             me.alive = false;
+
             setTimeout(() => {
                 me.getWsServer().shutDown();
                 me.getHttpServer().close();
-                nodes.has(port) ? reject() : resolve();
-            }, 200);
+                resolve();
+            }, 0);
         }),
         sendToClients: ({cmd, data}) => sendToClients(cmd, data)
     });

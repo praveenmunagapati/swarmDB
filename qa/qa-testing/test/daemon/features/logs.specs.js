@@ -1,7 +1,5 @@
 import waitUntil from 'async-wait-until';
-import {PATH_TO_DAEMON} from './00-setup';
-import {logFileExists, logFileMoved} from '../utils.js';
-import fs from 'fs';
+import {logFileExists, logFileMoved, readFile} from '../utils.js';
 import {exec}  from 'child_process';
 
 let logFileName;
@@ -18,18 +16,15 @@ describe('daemon', () => {
 
     describe('on startup', () => {
         it('should create a log', () =>
-            expect(readFile(logFileName)).to.have.string('Loading: bluzelle.json')
+            expect(readFile('/daemon/logs/', logFileName)).to.have.string('Loading: bluzelle.json')
         );
     });
 
     describe('on shutdown', () => {
        it('should log "shutting down"', () =>
-           expect(readFile(logFileName)).to.have.string('signal received -- shutting down')
+           expect(readFile('/daemon/logs/', logFileName)).to.have.string('signal received -- shutting down')
        );
     });
 
     afterEach(() => logFileName = '');
 });
-
-const readFile = logFileName =>
-    fs.readFileSync(PATH_TO_DAEMON + '/daemon/logs/' + logFileName, 'utf8');

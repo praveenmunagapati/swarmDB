@@ -1,7 +1,6 @@
 import waitUntil from "async-wait-until";
 import {PATH_TO_DAEMON} from './00-setup';
-import {logFileExists, logFileMoved} from '../utils.js';
-import fs from 'fs';
+import {logFileExists, logFileMoved, readFile} from '../utils.js';
 import util from 'util';
 import {exec}  from 'child_process';
 const execPromisified = util.promisify(exec);
@@ -37,12 +36,14 @@ describe('cmd line', () => {
 
     describe('successfully connects', () => {
 
+        let log, logFileName;
+
         describe('with no flags, defaults to ./bluzelle.json', () => {
 
             before( async () => {
                 exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm`);
                 await waitUntil(() => logFileName = logFileExists());
-                log = readFile(logFileName);
+                log = readFile('/daemon/', logFileName);
             });
 
             it('logs ethereum address from ./bluzelle.json', async () => {
@@ -58,14 +59,13 @@ describe('cmd line', () => {
             });
         });
 
-        let log, logFileName;
 
         describe('passing -a -l -p', () => {
 
             before( async () => {
                 exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -a 0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656 -l 127.0.0.1 -p 49155`);
                 await waitUntil(() => logFileName = logFileExists());
-                log = readFile(logFileName);
+                log = readFile('/daemon/', logFileName);
             });
 
             it('logs ethereum address passed', async () => {
@@ -82,6 +82,7 @@ describe('cmd line', () => {
         });
 
         after( async () => {
+            log = logFileName = '';
             exec('cd ../../; yarn daemon-kill');
             await waitUntil( () => logFileMoved(logFileName));
         });
@@ -93,6 +94,3 @@ const execAndRead = async (cmd, output, expected) => {
     output = eval(output);
     expect(output).to.have.string(expected);
 };
-
-const readFile = logFileName =>
-    fs.readFileSync(PATH_TO_DAEMON + '/daemon/' + logFileName, 'utf8');

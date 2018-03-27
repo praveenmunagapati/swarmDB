@@ -39,8 +39,13 @@ module.exports.reset = async function() {
     this.setMaxNodes(1);
     setData({});
 
-    await new Promise(resolve =>
-        nodes.keys().length && resolve());
+    await new Promise(resolve => (function loop() {
+
+        nodes.keys().length 
+            ? resolve()
+            : setTimeout(loop, 0);
+
+    })());
 
 }.bind(module.exports);
 

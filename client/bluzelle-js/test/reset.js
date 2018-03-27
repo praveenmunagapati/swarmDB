@@ -1,6 +1,6 @@
 
 const resetInNode = () => 
-	require('emulator/Emulator').reset();
+	require('./emulator/Emulator').reset();
 
 
 const resetInBrowser = () => new Promise(resolve => {
@@ -23,19 +23,15 @@ const resetInBrowser = () => new Promise(resolve => {
 });
 
 
-module.exports = {
+module.exports = () => {
 
-	reset: () => {
+	if(typeof window === 'undefined') {
 
-		if(typeof window === 'undefined') {
+		return resetInNode();
 
-			return resetInNode();
+	} else {
 
-		} else {
-
-			return resetInBrowser();
-
-		}
+		return resetInBrowser();
 
 	}
 

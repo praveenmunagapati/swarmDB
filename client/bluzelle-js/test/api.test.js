@@ -1,13 +1,9 @@
-const emulator = require('./emulator/Emulator');
+const reset = require('./reset');
 const api = require('../api');
 const assert = require('assert');
 
 
-beforeEach(() => {
-
-    emulator.reset();
-
-});
+beforeEach(() => { reset() });
 
 
 describe('bluzelle api', () => {

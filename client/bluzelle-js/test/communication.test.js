@@ -1,13 +1,9 @@
-const emulator = require('./emulator/Emulator');
+const reset = require('./reset');
 const communication = require('../communication');
 const assert = require('assert');
 
 
-beforeEach(() => {
-
-    emulator.reset();
-
-});
+beforeEach(() => { reset() });
 
 
 it('should be able to reset', () => {});

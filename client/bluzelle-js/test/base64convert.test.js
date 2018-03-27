@@ -3,7 +3,7 @@ const {isEqual} = require('lodash');
 const assert = require('assert');
 
 
-describe.only('base64 convert', () => {
+describe('base64 convert', () => {
 
 	it('should convert numbers', () => {
 
@@ -56,7 +56,7 @@ describe.only('base64 convert', () => {
 
 
 	it('should convert bytearray data', () => {
-		
+
 		const arr = new Uint8Array([1, 2, 3]);
 
 		const str = valToBase64(arr);

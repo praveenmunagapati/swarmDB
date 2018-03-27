@@ -1,18 +1,18 @@
-import fs from 'fs';
-import cmd from 'node-cmd';
 import waitUntil from 'async-wait-until';
-import {logFileExists, logFileMoved} from '../utils.js';
 import {PATH_TO_DAEMON} from './00-setup';
+import {logFileExists, logFileMoved} from '../utils.js';
+import fs from 'fs';
+import {exec}  from 'child_process';
 
 let logFileName;
 
 describe('daemon', () => {
 
     beforeEach( async () => {
-        cmd.run('cd ../../; yarn run-daemon'); // Working directory originates to where Chimp is called)
+        exec('cd ../../; yarn run-daemon'); // Working directory originates to where Chimp is called)
         await waitUntil( () => logFileName = logFileExists());
 
-        cmd.run('cd ../../; yarn daemon-kill');
+        exec('cd ../../; yarn daemon-kill');
         await waitUntil( () => logFileMoved(logFileName));
     });
 

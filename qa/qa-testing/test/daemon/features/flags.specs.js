@@ -1,10 +1,10 @@
-const util = require('util');
-const execPromisified = util.promisify(require('child_process').exec);
-const {exec} = require('child_process');
 import waitUntil from "async-wait-until";
 import {PATH_TO_DAEMON} from './00-setup';
 import {logFileExists, logFileMoved} from '../utils.js';
 import fs from 'fs';
+import util from 'util';
+import {exec}  from 'child_process';
+const execPromisified = util.promisify(exec);
 
 describe('cmd line', () => {
 

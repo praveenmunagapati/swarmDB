@@ -1,15 +1,15 @@
 import WebSocket from 'ws';
 import waitUntil from 'async-wait-until';
-import {get} from 'lodash';
-import cmd from 'node-cmd';
 import {logFileExists, logFileMoved} from '../utils.js';
+import {get} from 'lodash';
+import {exec}  from 'child_process';
 
 let socket, messages, logFileName;
 
 describe('web sockets interface', () => {
 
     beforeEach( async done => {
-        cmd.run('cd ../../; yarn run-daemon');
+        exec('cd ../../; yarn run-daemon');
         await waitUntil(() => logFileName = logFileExists());
 
         messages = [];
@@ -27,7 +27,7 @@ describe('web sockets interface', () => {
 
     afterEach( async () => {
         socket.close();
-        cmd.run('cd ../../; yarn daemon-kill');
+        exec('cd ../../; yarn daemon-kill');
         await waitUntil( () => logFileMoved(logFileName));
     });
 });

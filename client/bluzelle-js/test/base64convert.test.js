@@ -56,9 +56,7 @@ describe.only('base64 convert', () => {
 
 
 	it('should convert bytearray data', () => {
-
-		debugger;
-
+		
 		const arr = new Uint8Array([1, 2, 3]);
 
 		const str = valToBase64(arr);

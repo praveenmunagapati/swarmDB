@@ -41,7 +41,16 @@ describe('cmd line', () => {
         it('--bootstrap_url', async () => {
             await execAndRead('./swarm --bootstrap_url', 'stderr', "ERROR: the required argument for option '--bootstrap_url' is missing");
         });
+    });
 
+    describe('unsuccessful connections', () => {
+        it('with non existent config file', async () => {
+           await execAndRead('./swarm -c does_not_exist.json', 'stderr', 'Unhandled Exception: Failed to load: does_not_exist.json : No such file or directory, application will now exit')
+        });
+
+        it('with malformed config file', async () => {
+            await execAndRead('./swarm -c fail.json', 'stderr', 'Unhandled Exception: Failed to load: fail.json : Undefined error: 0, application will now exit')
+        });
     });
 
     describe('successfully connects', () => {

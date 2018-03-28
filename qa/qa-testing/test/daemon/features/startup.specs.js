@@ -11,28 +11,37 @@ describe('cmd line', () => {
     describe('accepts flags', () => {
 
         it('-h', async () => {
-            await execAndRead(`./swarm -h`, 'stdout', 'Shows this information');
+            await execAndRead('./swarm -h', 'stdout', 'Shows this information');
         });
 
         it('-v', async () => {
-            await execAndRead(`./swarm -v`, 'stdout', 'Bluzelle:');
+            await execAndRead('./swarm -v', 'stdout', 'Bluzelle:');
         });
 
         it('-c', async () => {
-            await execAndRead(`./swarm -c`,' stderr', "ERROR: the required argument for option '--config' is missing");
+            await execAndRead('./swarm -c',' stderr', "ERROR: the required argument for option '--config' is missing");
         });
 
         it('-a', async () => {
-            await execAndRead(`./swarm -a 0x006eae72077449caca91078ef78552c0cd9bce8f`,' stderr', "Missing listener address entry");
+            await execAndRead('./swarm -a 0x006eae72077449caca91078ef78552c0cd9bce8f',' stderr', 'Missing listener address entry');
         });
 
         it('-l', async () => {
-            await execAndRead(`./swarm -l 127.0.0.1`,' stderr', "Invalid listener port entry");
+            await execAndRead('./swarm -l 127.0.0.1',' stderr', 'Invalid listener port entry');
         });
 
         it('-p', async () => {
-            await execAndRead(`./swarm -p 49152`,' stderr', "Missing listener address entry");
+            await execAndRead('./swarm -p 49152',' stderr', 'Missing listener address entry');
         });
+
+        it('-b', async () => {
+            await execAndRead('./swarm -b', 'stderr', "ERROR: the required argument for option '--bootstrap_file' is missing");
+        });
+
+        it('--bootstrap_url', async () => {
+            await execAndRead('./swarm --bootstrap_url', 'stderr', "ERROR: the required argument for option '--bootstrap_url' is missing");
+        });
+
     });
 
     describe('successfully connects', () => {

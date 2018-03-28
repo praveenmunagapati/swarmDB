@@ -66,7 +66,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./test-browser/test.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./browser-test/webpage/main.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -78,7 +78,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const communication = __webpack_require__(/*! ./communication */ \"./communication.js\");\nconst {valToBase64, base64ToVal} = __webpack_require__(/*! ./base64convert */ \"./base64convert.js\");\n\nconst updateBase64 = communication.update;\n\nconst updateWithConversion = (key, value) =>\n    updateBase64(key, valToBase64(value));\n\n\nconst readBase64 = communication.read;\n\nconst readWithConversion = key => new Promise(resolve =>\n    readBase64(key).then(base64 =>\n        resolve(base64ToVal(base64))));\n\n\n\nmodule.exports = Object.assign(communication, {\n    update: updateWithConversion,\n    read: readWithConversion\n});\n\n//# sourceURL=webpack:///./api.js?");
+eval("const communication = __webpack_require__(/*! ./communication */ \"./communication.js\");\nconst {valToBase64, base64ToVal} = __webpack_require__(/*! ./base64convert */ \"./base64convert.js\");\n\nconst updateBase64 = communication.update;\n\nconst updateWithConversion = (key, value) =>\n    updateBase64(key, valToBase64(value));\n\n\nconst readBase64 = communication.read;\n\nconst readWithConversion = key =>\n    readBase64(key).then(\n    \tbase64ToVal);\n\n\nmodule.exports = Object.assign(communication, {\n    update: updateWithConversion,\n    read: readWithConversion\n});\n\n//# sourceURL=webpack:///./api.js?");
 
 /***/ }),
 
@@ -93,6 +93,17 @@ eval("/* WEBPACK VAR INJECTION */(function(global) {const Buffer = global.Buffer
 
 /***/ }),
 
+/***/ "./browser-test/webpage/main.js":
+/*!**************************************!*\
+  !*** ./browser-test/webpage/main.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("mocha.setup('bdd');\nmocha.setup({timeout: 5000});\n\nconst requireContext = __webpack_require__(\"./test sync recursive \\\\.test\\\\.js\");\nrequireContext.keys().forEach(requireContext);\n\n\nmocha.run();\n\n//# sourceURL=webpack:///./browser-test/webpage/main.js?");
+
+/***/ }),
+
 /***/ "./communication.js":
 /*!**************************!*\
   !*** ./communication.js ***!
@@ -100,7 +111,7 @@ eval("/* WEBPACK VAR INJECTION */(function(global) {const Buffer = global.Buffer
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const WebSocket = __webpack_require__(/*! isomorphic-ws */ \"./node_modules/isomorphic-ws/browser.js\");\n\nconst connections = new Set();\nconst resolvers = new Map();\n\n\nconst ping = () => new Promise(resolve => {\n\n    send({\n        cmd: 'ping',\n        'bzn-api': 'ping'\n    }, obj => resolve());\n\n});\n\n\nconst connect = addr => {\n\n    return new Promise(resolve => {\n\n        const s = new WebSocket(addr);\n\n        s.onopen = () => {\n\n            connections.add(s);\n            resolve(s);\n\n        };\n\n        s.onclose = () => connections.delete(s);\n        s.onerror = e =>  {\n\n            s.close();\n            console.error(e);\n\n        }\n\n        s.onmessage = e => onMessage(JSON.parse(e.data), s);\n\n    });\n\n};\n\n\nconst onMessage = (event, socket) => {\n\n    debugger;\n\n    resolvers.get(event.response_to)(event);\n    resolvers.delete(event.response_to);\n\n};\n\n\n\nconst disconnect = () => {\n    for(let connection of connections.values()) {\n        connection.close();\n    }\n};\n\n\nconst amendBznApi = obj =>\n    Object.assign(obj, {\n        'bzn-api': 'crud'\n    });\n\n\nconst amendRequestID = (() => {\n\n    let requestIDCounter = 0;\n\n    return obj =>\n        Object.assign(obj, {\n            'request_id': requestIDCounter++\n        });\n\n})();\n\n\nconst send = (obj, resolver) => {\n\n    const message = amendRequestID(obj);\n\n    resolvers.set(message.request_id, resolver);\n\n    for(let connection of connections.values()) {\n        connection.send(JSON.stringify(message));\n    }\n};\n\n\nconst update = (key, value) => new Promise((resolve, reject) => {\n\n    const cmd = amendBznApi({\n        cmd: 'update',\n        data: {\n            key, value\n        }\n    });\n\n    send(cmd, obj =>\n        obj.error ? resolve(new Error(obj.error)) : resolve());\n\n});\n\n\nconst delet = key => new Promise((resolve, reject) => {\n\n    const cmd = amendBznApi({\n        cmd: 'delete',\n        data: {\n            key\n        }\n    });\n\n\n    send(cmd, obj =>\n        obj.error ? resolve(new Error(obj.error)) : resolve());\n\n});\n\n\nconst read = key => new Promise((resolve, reject) => {\n\n    const cmd = amendBznApi({\n        cmd: 'read',\n        data: {\n            key\n        }\n    });\n\n\n    send(cmd, obj =>\n        obj.error ? resolve(new Error(obj.error)) : resolve(obj.data.value));\n\n});\n\n\nconst has = key => new Promise(resolve => {\n\n    const cmd = amendBznApi({\n        cmd: 'has',\n        data: {\n            key\n        }\n    });\n\n\n    send(cmd, obj => resolve(obj.data.value));\n\n});\n\n\nmodule.exports = {\n    connect,\n    disconnect,\n    ping,\n\n    read,\n    update,\n    'delete': delet, // delete is a reserved keyword\n    has\n};\n\n\n\n\n//# sourceURL=webpack:///./communication.js?");
+eval("const WebSocket = __webpack_require__(/*! isomorphic-ws */ \"./node_modules/isomorphic-ws/browser.js\");\n\nconst connections = new Set();\nconst resolvers = new Map();\n\n\nconst ping = () => new Promise(resolve => {\n\n    send({\n        cmd: 'ping',\n        'bzn-api': 'ping'\n    }, obj => resolve());\n\n});\n\n\nconst connect = addr => {\n\n    return new Promise(resolve => {\n\n        const s = new WebSocket(addr);\n\n        s.onopen = () => {\n\n            connections.add(s);\n            resolve(s);\n\n        };\n\n        s.onclose = () => connections.delete(s);\n        s.onerror = e =>  {\n\n            s.close();\n            console.error(e);\n\n        }\n\n        s.onmessage = e => onMessage(JSON.parse(e.data), s);\n\n    });\n\n};\n\n\nconst onMessage = (event, socket) => {\n\n    resolvers.get(event.response_to)(event);\n    resolvers.delete(event.response_to);\n\n};\n\n\n\nconst disconnect = () => {\n    for(let connection of connections.values()) {\n        connection.close();\n    }\n};\n\n\nconst amendBznApi = obj =>\n    Object.assign(obj, {\n        'bzn-api': 'crud'\n    });\n\n\nconst amendRequestID = (() => {\n\n    let requestIDCounter = 0;\n\n    return obj =>\n        Object.assign(obj, {\n            'request_id': requestIDCounter++\n        });\n\n})();\n\n\nconst send = (obj, resolver) => {\n\n    const message = amendRequestID(obj);\n\n    resolvers.set(message.request_id, resolver);\n\n    for(let connection of connections.values()) {\n        connection.send(JSON.stringify(message));\n    }\n};\n\n\nconst update = (key, value) => new Promise((resolve, reject) => {\n\n    const cmd = amendBznApi({\n        cmd: 'update',\n        data: {\n            key, value\n        }\n    });\n\n    send(cmd, obj =>\n        obj.error ? reject(new Error(obj.error)) : resolve());\n\n});\n\n\nconst delet = key => new Promise((resolve, reject) => {\n\n    const cmd = amendBznApi({\n        cmd: 'delete',\n        data: {\n            key\n        }\n    });\n\n\n    send(cmd, obj =>\n        obj.error ? reject(new Error(obj.error)) : resolve());\n\n});\n\n\nconst read = key => new Promise((resolve, reject) => {\n\n    const cmd = amendBznApi({\n        cmd: 'read',\n        data: {\n            key\n        }\n    });\n\n\n    send(cmd, obj =>\n        obj.error ? reject(new Error(obj.error)) : resolve(obj.data.value));\n\n});\n\n\nconst has = key => new Promise(resolve => {\n\n    const cmd = amendBznApi({\n        cmd: 'has',\n        data: {\n            key\n        }\n    });\n\n\n    send(cmd, obj => resolve(obj.data.value));\n\n});\n\n\nmodule.exports = {\n    connect,\n    disconnect,\n    ping,\n\n    read,\n    update,\n    'delete': delet, // delete is a reserved keyword\n    has\n};\n\n\n\n\n//# sourceURL=webpack:///./communication.js?");
 
 /***/ }),
 
@@ -272,17 +283,6 @@ eval("var map = {\n\t\"./api.test.js\": \"./test/api.test.js\",\n\t\"./base64con
 
 /***/ }),
 
-/***/ "./test-browser/test.js":
-/*!******************************!*\
-  !*** ./test-browser/test.js ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("mocha.setup('bdd');\n\nconst requireContext = __webpack_require__(\"./test sync recursive \\\\.test\\\\.js\");\nrequireContext.keys().forEach(requireContext);\n\nmocha.run();\n\n//# sourceURL=webpack:///./test-browser/test.js?");
-
-/***/ }),
-
 /***/ "./test/api.test.js":
 /*!**************************!*\
   !*** ./test/api.test.js ***!
@@ -312,7 +312,7 @@ eval("const {valToBase64, base64ToVal} = __webpack_require__(/*! ../base64conver
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const reset = __webpack_require__(/*! ./reset */ \"./test/reset.js\");\nconst communication = __webpack_require__(/*! ../communication */ \"./communication.js\");\nconst assert = __webpack_require__(/*! assert */ \"./node_modules/assert/assert.js\");\n\n\nbeforeEach(reset);\n\n\nit('should be able to reset', () => {});\n\n\ndescribe('bluzelle connection', () => {\n\n    beforeEach(() =>\n        communication.connect('ws://localhost:8100'));\n\n    afterEach(() =>\n        communication.disconnect());\n\n\n    it('should be able to connect to 8100', () => {});\n\n\n    it('should be able to ping the connection', async () => {\n\n        return communication.ping();\n\n    });\n\n    it('should be able to read and update base64 strings', async () => {\n\n        await communication.update('mykey', 'abcdef');\n\n        assert(await communication.read('mykey') === 'abcdef')\n\n    });\n\n    it('should be able to query if the database has a key', async () => {\n\n        await communication.update('myKey', 'abc');\n        assert(await communication.has('myKey'));\n        assert(!await communication.has('someOtherKey'));\n\n    });\n\n    it('should be able to delete a key', async () => {\n\n        await communication.update('myKey', 'abc');\n        await communication.delete('myKey');\n        assert(!await communication.has('myKey'));\n\n    });\n\n    it('should throw an error when trying to read a non-existent key', done => {\n\n        communication.read('abc123').then(v => v instanceof Error && done());\n\n    });\n\n    it('should throw an error when trying to delete a non-existent key', done => {\n\n        communication.delete('something').then(v => v instanceof Error && done());\n\n    });\n\n});\n\n//# sourceURL=webpack:///./test/communication.test.js?");
+eval("const reset = __webpack_require__(/*! ./reset */ \"./test/reset.js\");\nconst communication = __webpack_require__(/*! ../communication */ \"./communication.js\");\nconst assert = __webpack_require__(/*! assert */ \"./node_modules/assert/assert.js\");\n\n\nbeforeEach(reset);\n\n\nit('should be able to reset', () => {});\n\n\ndescribe('bluzelle connection', () => {\n\n    beforeEach(() =>\n        communication.connect('ws://localhost:8100'));\n\n    afterEach(() =>\n        communication.disconnect());\n\n\n    it('should be able to connect to 8100', () => {});\n\n\n    it('should be able to ping the connection', async () => {\n\n        return communication.ping();\n\n    });\n\n    it('should be able to read and update base64 strings', async () => {\n\n        await communication.update('mykey', 'abcdef');\n\n        assert(await communication.read('mykey') === 'abcdef')\n\n    });\n\n    it('should be able to query if the database has a key', async () => {\n\n        await communication.update('myKey', 'abc');\n        assert(await communication.has('myKey'));\n        assert(!await communication.has('someOtherKey'));\n\n    });\n\n    it('should be able to delete a key', async () => {\n\n        await communication.update('myKey', 'abc');\n        await communication.delete('myKey');\n        assert(!await communication.has('myKey'));\n\n    });\n\n    it('should throw an error when trying to read a non-existent key', done => {\n\n        communication.read('abc123').catch(() => done());\n\n    });\n\n    it('should throw an error when trying to delete a non-existent key', done => {\n\n        communication.delete('something').catch(() => done());\n\n    });\n\n});\n\n//# sourceURL=webpack:///./test/communication.test.js?");
 
 /***/ }),
 
@@ -334,7 +334,7 @@ eval("\n\n//# sourceURL=webpack:///./test/multi-client.test.js?");
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\nconst resetInNode = () => \n\t\n\t// This eval is so that webpack doesn't bundle the emulator,\n\t// if we are compiling for the browser.\n\n\teval(\"require('./emulator/Emulator')\").reset();\n\n\nconst resetInBrowser = () => new Promise(resolve => {\n\n\tconst ws = new WebSocket('ws://localhost:8101');\n\t\n\tws.onopen = () => {\n\n\t\tws.send('reset');\n\n\t};\n\n\tws.onmessage = () => {\n\n\t\tws.close();\n\t\tresolve();\n\n\t};\n\n});\n\n\nmodule.exports = () => {\n\n\tif(typeof window === 'undefined') {\n\n\t\treturn resetInNode();\n\n\t} else {\n\n\t\treturn resetInBrowser();\n\n\t}\n\n};\n\n//# sourceURL=webpack:///./test/reset.js?");
+eval("\nconst resetInNode = () => \n\t\n\t// This eval is so that webpack doesn't bundle the emulator,\n\t// if we are compiling tests for the browser.\n\n\teval(\"require('../emulator/Emulator')\").reset();\n\n\nconst resetInBrowser = () => new Promise(resolve => {\n\n\tconst ws = new WebSocket('ws://localhost:8101');\n\t\n\tws.onopen = () => {\n\n\t\tws.send('reset');\n\n\t};\n\n\tws.onmessage = () => {\n\n\t\tws.close();\n\t\tresolve();\n\n\t};\n\n});\n\n\nmodule.exports = () => {\n\n\tif(typeof window === 'undefined') {\n\n\t\treturn resetInNode();\n\n\t} else {\n\n\t\treturn resetInBrowser();\n\n\t}\n\n};\n\n//# sourceURL=webpack:///./test/reset.js?");
 
 /***/ })
 

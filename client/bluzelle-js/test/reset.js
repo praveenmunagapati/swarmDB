@@ -2,9 +2,9 @@
 const resetInNode = () => 
 	
 	// This eval is so that webpack doesn't bundle the emulator,
-	// if we are compiling for the browser.
+	// if we are compiling tests for the browser.
 
-	eval("require('./emulator/Emulator')").reset();
+	eval("require('../emulator/Emulator')").reset();
 
 
 const resetInBrowser = () => new Promise(resolve => {

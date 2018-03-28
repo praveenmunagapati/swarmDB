@@ -2,7 +2,7 @@ module.exports = {
 
 	mode: 'development',
 
-	entry: __dirname + '/test.js',
+	entry: __dirname + '/main.js',
 	output: {
 		path: __dirname,
 		filename: 'bundle.js'

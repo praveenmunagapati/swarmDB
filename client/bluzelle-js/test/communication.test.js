@@ -53,13 +53,13 @@ describe('bluzelle connection', () => {
 
     it('should throw an error when trying to read a non-existent key', done => {
 
-        communication.read('abc123').then(v => v instanceof Error && done());
+        communication.read('abc123').catch(() => done());
 
     });
 
     it('should throw an error when trying to delete a non-existent key', done => {
 
-        communication.delete('something').then(v => v instanceof Error && done());
+        communication.delete('something').catch(() => done());
 
     });
 

@@ -44,8 +44,6 @@ const connect = addr => {
 
 const onMessage = (event, socket) => {
 
-    debugger;
-
     resolvers.get(event.response_to)(event);
     resolvers.delete(event.response_to);
 
@@ -100,7 +98,7 @@ const update = (key, value) => new Promise((resolve, reject) => {
     });
 
     send(cmd, obj =>
-        obj.error ? resolve(new Error(obj.error)) : resolve());
+        obj.error ? reject(new Error(obj.error)) : resolve());
 
 });
 
@@ -116,7 +114,7 @@ const delet = key => new Promise((resolve, reject) => {
 
 
     send(cmd, obj =>
-        obj.error ? resolve(new Error(obj.error)) : resolve());
+        obj.error ? reject(new Error(obj.error)) : resolve());
 
 });
 
@@ -132,7 +130,7 @@ const read = key => new Promise((resolve, reject) => {
 
 
     send(cmd, obj =>
-        obj.error ? resolve(new Error(obj.error)) : resolve(obj.data.value));
+        obj.error ? reject(new Error(obj.error)) : resolve(obj.data.value));
 
 });
 

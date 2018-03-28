@@ -9,10 +9,9 @@ const updateWithConversion = (key, value) =>
 
 const readBase64 = communication.read;
 
-const readWithConversion = key => new Promise(resolve =>
-    readBase64(key).then(base64 =>
-        resolve(base64ToVal(base64))));
-
+const readWithConversion = key =>
+    readBase64(key).then(
+    	base64ToVal);
 
 
 module.exports = Object.assign(communication, {

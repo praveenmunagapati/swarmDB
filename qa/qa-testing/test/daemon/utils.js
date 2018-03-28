@@ -9,7 +9,7 @@ module.exports = {
     },
     logFileMoved: logFileName => {
         // Log file is moved to /daemon/logs after Daemon is stopped
-        return filter(logDirContent('/daemon/logs'), file => includes(file, logFileName))[0];
+        return filter(logDirContent('/daemon/logs'), files => includes(files, logFileName))[0];
     },
     readFile: (dirPath, logFileName) => {
         return fs.readFileSync(PATH_TO_DAEMON + dirPath + logFileName, 'utf8');

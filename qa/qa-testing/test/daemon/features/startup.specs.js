@@ -3,6 +3,7 @@ import {PATH_TO_DAEMON} from './00-setup';
 import {logFileExists, logFileMoved, readFile} from '../utils.js';
 import util from 'util';
 import {exec}  from 'child_process';
+import {includes} from 'lodash';
 const execPromisified = util.promisify(exec);
 
 describe('cmd line', () => {
@@ -42,35 +43,34 @@ describe('cmd line', () => {
 
             before( async () => {
                 exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm`);
-                await waitUntil(() => logFileName = logFileExists());
-                log = readFile('/daemon/', logFileName);
+                [log, logFileName] = await waitForStartup();
             });
 
             it('logs loading ./bluzelle.json', () => {
                 expect(log).to.have.string('Loading: bluzelle.json');
             });
 
-            it('logs ethereum address', async () => {
+            it('logs ethereum address', () => {
                 expect(log).to.have.string('"ethereum" : "0x006eae72077449caca91078ef78552c0cd9bce8f"');
             });
 
-            it('logs listener_address', async () => {
+            it('logs listener_address', () => {
                 expect(log).to.have.string('"listener_address" : "127.0.0.1"');
             });
 
-            it('logs listener_port', async () => {
+            it('logs listener_port', () => {
                 expect(log).to.have.string('"listener_port" : 49152');
             });
 
-            it('logs reading peers', async () => {
+            it('logs reading peers', () => {
                 expect(log).to.have.string('Reading peers from');
             });
 
-            it('logs individual peers', async () => {
+            it('logs individual peers', () => {
                 expect(log).to.have.string('Found peer 123.45.67.123:50000 (fake_1)');
             });
 
-            it('logs number of peers found', async () => {
+            it('logs number of peers found', () => {
                 expect(log).to.have.string('Found 3 new peers');
             });
 
@@ -84,36 +84,34 @@ describe('cmd line', () => {
 
             before( async () => {
                 exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -c ./bluzelle-bootstrap-url.json`);
-                await waitUntil(() => logFileName = logFileExists());
-                log = readFile('/daemon/', logFileName);
-                browser.pause(300); // timing issue when daemon downloads peer list
+                [log, logFileName] = await waitForStartup();
             });
 
             it('logs loading ./bluzelle-bootstrap-url.json', () => {
                expect(log).to.have.string('Loading: ./bluzelle-bootstrap-url.json');
             });
 
-            it('logs ethereum address', async () => {
+            it('logs ethereum address', () => {
                 expect(log).to.have.string('"ethereum" : "0x006eae72077449caca91078ef78552c0cd9bce8f"');
             });
 
-            it('logs listener_address', async () => {
+            it('logs listener_address', () => {
                 expect(log).to.have.string('"listener_address" : "127.0.0.1"');
             });
 
-            it('logs listener_port', async () => {
+            it('logs listener_port', () => {
                 expect(log).to.have.string('"listener_port" : 49200');
             });
 
-            it('logs reading peers', async () => {
+            it('logs reading peers', () => {
                 expect(log).to.have.string('Downloaded peer list from pastebin.com/raw/mbdezA9Z');
             });
 
-            it('logs individual peers', async () => {
+            it('logs individual peers', () => {
                 expect(log).to.have.string('Found peer 79.80.44.60:51000 (jack)');
             });
 
-            it('logs number of peers found', async () => {
+            it('logs number of peers found', () => {
                 expect(log).to.have.string('Found 4 new peers');
             });
 
@@ -123,36 +121,34 @@ describe('cmd line', () => {
             });
         });
 
-
         describe('with -a -l -p -b ./peers.json', () => {
 
             before( async () => {
                 exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -a 0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656 -l 127.0.0.1 -p 49155 -b ./peers.json`);
-                await waitUntil(() => logFileName = logFileExists());
-                log = readFile('/daemon/', logFileName);
+                [log, logFileName] = await waitForStartup();
             });
 
-            it('logs ethereum address passed', async () => {
+            it('logs ethereum address passed', () => {
                 expect(log).to.have.string('"ethereum" : "0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656"');
             });
 
-            it('logs listener_address passed', async () => {
+            it('logs listener_address passed', () => {
                 expect(log).to.have.string('"listener_address" : "127.0.0.1"');
             });
 
-            it('logs listener_port passed', async () => {
+            it('logs listener_port passed', () => {
                 expect(log).to.have.string('"listener_port" : 49155');
             });
 
-            it('logs reading peers', async () => {
+            it('logs reading peers', () => {
                 expect(log).to.have.string('Reading peers from');
             });
 
-            it('logs individual peers', async () => {
+            it('logs individual peers', () => {
                 expect(log).to.have.string('Found peer 123.45.67.123:50000 (fake_1)');
             });
 
-            it('logs number of peers found', async () => {
+            it('logs number of peers found', () => {
                 expect(log).to.have.string('Found 3 new peers');
             });
 
@@ -160,39 +156,36 @@ describe('cmd line', () => {
                 exec('cd ../../; yarn daemon-kill');
                 await waitUntil( () => logFileMoved(logFileName));
             });
-
         });
 
         describe('with -a -l -p -bootstrap_url', () => {
 
             before( async () => {
                 exec(`cd ${PATH_TO_DAEMON}/daemon; ./swarm -a 0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656 -l 127.0.0.1 -p 49155 --bootstrap_url pastebin.com/raw/mbdezA9Z`);
-                await waitUntil(() => logFileName = logFileExists());
-                log = readFile('/daemon/', logFileName);
-                browser.pause(200); // timing issue when daemon downloads peer list
+                [log, logFileName] = await waitForStartup();
             });
 
-            it('logs ethereum address passed', async () => {
+            it('logs ethereum address passed', () => {
                 expect(log).to.have.string('"ethereum" : "0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656"');
             });
 
-            it('logs listener_address passed', async () => {
+            it('logs listener_address passed', () => {
                 expect(log).to.have.string('"listener_address" : "127.0.0.1"');
             });
 
-            it('logs listener_port passed', async () => {
+            it('logs listener_port passed', () => {
                 expect(log).to.have.string('"listener_port" : 49155');
             });
 
-            it('logs reading peers', async () => {
+            it('logs reading peers', () => {
                 expect(log).to.have.string('Downloaded peer list from pastebin.com/raw/mbdezA9Z');
             });
 
-            it('logs individual peers', async () => {
+            it('logs individual peers', () => {
                 expect(log).to.have.string('Found peer 79.80.44.60:51000 (jack)');
             });
 
-            it('logs number of peers found', async () => {
+            it('logs number of peers found', () => {
                 expect(log).to.have.string('Found 4 new peers');
             });
 
@@ -200,9 +193,7 @@ describe('cmd line', () => {
                 exec('cd ../../; yarn daemon-kill');
                 await waitUntil( () => logFileMoved(logFileName));
             });
-
         });
-
     });
 });
 
@@ -210,4 +201,10 @@ const execAndRead = async (cmd, output, expected) => {
     const {stdout, stderr} = await execPromisified(`cd ${PATH_TO_DAEMON}/daemon;` + cmd);
     output = eval(output);
     expect(output).to.have.string(expected);
+};
+
+const waitForStartup = async (logFileName) => {
+    await waitUntil(() => logFileName = logFileExists());
+    await waitUntil(() => includes(readFile('/daemon/', logFileName), 'bootstrap_peers.cpp'));
+    return [readFile('/daemon/', logFileName), logFileName];
 };

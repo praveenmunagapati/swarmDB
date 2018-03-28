@@ -10,47 +10,37 @@ describe('cmd line', () => {
 
     describe('accepts flags', () => {
 
-        it('-h', async () => {
-            await execAndRead('./swarm -h', 'stdout', 'Shows this information');
-        });
+        it('-h', async () =>
+            await execAndRead('./swarm -h', 'stdout', 'Shows this information'));
 
-        it('-v', async () => {
-            await execAndRead('./swarm -v', 'stdout', 'Bluzelle:');
-        });
+        it('-v', async () =>
+            await execAndRead('./swarm -v', 'stdout', 'Bluzelle:'));
 
-        it('-c', async () => {
-            await execAndRead('./swarm -c',' stderr', "ERROR: the required argument for option '--config' is missing");
-        });
+        it('-c', async () =>
+            await execAndRead('./swarm -c',' stderr', "ERROR: the required argument for option '--config' is missing"));
 
-        it('-a', async () => {
-            await execAndRead('./swarm -a 0x006eae72077449caca91078ef78552c0cd9bce8f',' stderr', 'Missing listener address entry');
-        });
+        it('-a', async () =>
+            await execAndRead('./swarm -a 0x006eae72077449caca91078ef78552c0cd9bce8f',' stderr', 'Missing listener address entry'));
 
-        it('-l', async () => {
-            await execAndRead('./swarm -l 127.0.0.1',' stderr', 'Invalid listener port entry');
-        });
+        it('-l', async () =>
+            await execAndRead('./swarm -l 127.0.0.1',' stderr', 'Invalid listener port entry'));
 
-        it('-p', async () => {
-            await execAndRead('./swarm -p 49152',' stderr', 'Missing listener address entry');
-        });
+        it('-p', async () =>
+            await execAndRead('./swarm -p 49152',' stderr', 'Missing listener address entry'));
 
-        it('-b', async () => {
-            await execAndRead('./swarm -b', 'stderr', "ERROR: the required argument for option '--bootstrap_file' is missing");
-        });
+        it('-b', async () =>
+            await execAndRead('./swarm -b', 'stderr', "ERROR: the required argument for option '--bootstrap_file' is missing"));
 
-        it('--bootstrap_url', async () => {
-            await execAndRead('./swarm --bootstrap_url', 'stderr', "ERROR: the required argument for option '--bootstrap_url' is missing");
-        });
+        it('--bootstrap_url', async () =>
+            await execAndRead('./swarm --bootstrap_url', 'stderr', "ERROR: the required argument for option '--bootstrap_url' is missing"));
     });
 
     describe('unsuccessful connections', () => {
-        it('with non existent config file', async () => {
-           await execAndRead('./swarm -c does_not_exist.json', 'stderr', 'Unhandled Exception: Failed to load: does_not_exist.json : No such file or directory, application will now exit')
-        });
+        it('with non existent config file', async () =>
+            await execAndRead('./swarm -c does_not_exist.json', 'stderr', 'Unhandled Exception: Failed to load: does_not_exist.json : No such file or directory, application will now exit'));
 
-        it('with malformed config file', async () => {
-            await execAndRead('./swarm -c fail.json', 'stderr', 'Unhandled Exception: Failed to load: fail.json : Undefined error: 0, application will now exit')
-        });
+        it('with malformed config file', async () =>
+            await execAndRead('./swarm -c fail.json', 'stderr', 'Unhandled Exception: Failed to load: fail.json : Undefined error: 0, application will now exit'));
     });
 
     describe('successfully connects', () => {
@@ -64,33 +54,26 @@ describe('cmd line', () => {
                 [log, logFileName] = await waitForStartup();
             });
 
-            it('logs loading ./bluzelle.json', () => {
-                expect(log).to.have.string('Loading: bluzelle.json');
-            });
+            it('logs loading ./bluzelle.json', () =>
+                expect(log).to.have.string('Loading: bluzelle.json'));
 
-            it('logs ethereum address', () => {
-                expect(log).to.have.string('"ethereum" : "0x006eae72077449caca91078ef78552c0cd9bce8f"');
-            });
+            it('logs ethereum address', () =>
+                expect(log).to.have.string('"ethereum" : "0x006eae72077449caca91078ef78552c0cd9bce8f"'));
 
-            it('logs listener_address', () => {
-                expect(log).to.have.string('"listener_address" : "127.0.0.1"');
-            });
+            it('logs listener_address', () =>
+                expect(log).to.have.string('"listener_address" : "127.0.0.1"'));
 
-            it('logs listener_port', () => {
-                expect(log).to.have.string('"listener_port" : 49152');
-            });
+            it('logs listener_port', () =>
+                expect(log).to.have.string('"listener_port" : 49152'));
 
-            it('logs reading peers', () => {
-                expect(log).to.have.string('Reading peers from');
-            });
+            it('logs reading peers', () =>
+                expect(log).to.have.string('Reading peers from'));
 
-            it('logs individual peers', () => {
-                expect(log).to.have.string('Found peer 123.45.67.123:50000 (fake_1)');
-            });
+            it('logs individual peers', () =>
+                expect(log).to.have.string('Found peer 123.45.67.123:50000 (fake_1)'));
 
-            it('logs number of peers found', () => {
-                expect(log).to.have.string('Found 3 new peers');
-            });
+            it('logs number of peers found', () =>
+                expect(log).to.have.string('Found 3 new peers'));
 
             after( async () => {
                 exec('cd ../../; yarn daemon-kill');
@@ -105,33 +88,26 @@ describe('cmd line', () => {
                 [log, logFileName] = await waitForStartup();
             });
 
-            it('logs loading ./bluzelle-bootstrap-url.json', () => {
-               expect(log).to.have.string('Loading: ./bluzelle-bootstrap-url.json');
-            });
+            it('logs loading ./bluzelle-bootstrap-url.json', () =>
+               expect(log).to.have.string('Loading: ./bluzelle-bootstrap-url.json'));
 
-            it('logs ethereum address', () => {
-                expect(log).to.have.string('"ethereum" : "0x006eae72077449caca91078ef78552c0cd9bce8f"');
-            });
+            it('logs ethereum address', () =>
+                expect(log).to.have.string('"ethereum" : "0x006eae72077449caca91078ef78552c0cd9bce8f"'));
 
-            it('logs listener_address', () => {
-                expect(log).to.have.string('"listener_address" : "127.0.0.1"');
-            });
+            it('logs listener_address', () =>
+                expect(log).to.have.string('"listener_address" : "127.0.0.1"'));
 
-            it('logs listener_port', () => {
-                expect(log).to.have.string('"listener_port" : 49200');
-            });
+            it('logs listener_port', () =>
+                expect(log).to.have.string('"listener_port" : 49200'));
 
-            it('logs reading peers', () => {
-                expect(log).to.have.string('Downloaded peer list from pastebin.com/raw/mbdezA9Z');
-            });
+            it('logs reading peers', () =>
+                expect(log).to.have.string('Downloaded peer list from pastebin.com/raw/mbdezA9Z'));
 
-            it('logs individual peers', () => {
-                expect(log).to.have.string('Found peer 79.80.44.60:51000 (jack)');
-            });
+            it('logs individual peers', () =>
+                expect(log).to.have.string('Found peer 79.80.44.60:51000 (jack)'));
 
-            it('logs number of peers found', () => {
-                expect(log).to.have.string('Found 4 new peers');
-            });
+            it('logs number of peers found', () =>
+                expect(log).to.have.string('Found 4 new peers'));
 
             after( async () => {
                 exec('cd ../../; yarn daemon-kill');
@@ -146,29 +122,23 @@ describe('cmd line', () => {
                 [log, logFileName] = await waitForStartup();
             });
 
-            it('logs ethereum address passed', () => {
-                expect(log).to.have.string('"ethereum" : "0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656"');
-            });
+            it('logs ethereum address passed', () =>
+                expect(log).to.have.string('"ethereum" : "0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656"'));
 
-            it('logs listener_address passed', () => {
-                expect(log).to.have.string('"listener_address" : "127.0.0.1"');
-            });
+            it('logs listener_address passed', () =>
+                expect(log).to.have.string('"listener_address" : "127.0.0.1"'));
 
-            it('logs listener_port passed', () => {
-                expect(log).to.have.string('"listener_port" : 49155');
-            });
+            it('logs listener_port passed', () =>
+                expect(log).to.have.string('"listener_port" : 49155'));
 
-            it('logs reading peers', () => {
-                expect(log).to.have.string('Reading peers from');
-            });
+            it('logs reading peers', () =>
+                expect(log).to.have.string('Reading peers from'));
 
-            it('logs individual peers', () => {
-                expect(log).to.have.string('Found peer 123.45.67.123:50000 (fake_1)');
-            });
+            it('logs individual peers', () =>
+                expect(log).to.have.string('Found peer 123.45.67.123:50000 (fake_1)'));
 
-            it('logs number of peers found', () => {
-                expect(log).to.have.string('Found 3 new peers');
-            });
+            it('logs number of peers found', () =>
+                expect(log).to.have.string('Found 3 new peers'));
 
             after( async () => {
                 exec('cd ../../; yarn daemon-kill');
@@ -183,29 +153,23 @@ describe('cmd line', () => {
                 [log, logFileName] = await waitForStartup();
             });
 
-            it('logs ethereum address passed', () => {
-                expect(log).to.have.string('"ethereum" : "0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656"');
-            });
+            it('logs ethereum address passed', () =>
+                expect(log).to.have.string('"ethereum" : "0xf88CD1943406a0A6c1492C35Bb0eE645CD7eA656"'));
 
-            it('logs listener_address passed', () => {
-                expect(log).to.have.string('"listener_address" : "127.0.0.1"');
-            });
+            it('logs listener_address passed', () =>
+                expect(log).to.have.string('"listener_address" : "127.0.0.1"'));
 
-            it('logs listener_port passed', () => {
-                expect(log).to.have.string('"listener_port" : 49155');
-            });
+            it('logs listener_port passed', () =>
+                expect(log).to.have.string('"listener_port" : 49155'));
 
-            it('logs reading peers', () => {
-                expect(log).to.have.string('Downloaded peer list from pastebin.com/raw/mbdezA9Z');
-            });
+            it('logs reading peers', () =>
+                expect(log).to.have.string('Downloaded peer list from pastebin.com/raw/mbdezA9Z'));
 
-            it('logs individual peers', () => {
-                expect(log).to.have.string('Found peer 79.80.44.60:51000 (jack)');
-            });
+            it('logs individual peers', () =>
+                expect(log).to.have.string('Found peer 79.80.44.60:51000 (jack)'));
 
-            it('logs number of peers found', () => {
-                expect(log).to.have.string('Found 4 new peers');
-            });
+            it('logs number of peers found', () =>
+                expect(log).to.have.string('Found 4 new peers'));
 
             after( async () => {
                 exec('cd ../../; yarn daemon-kill');

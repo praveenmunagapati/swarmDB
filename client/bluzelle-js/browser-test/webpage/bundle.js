@@ -279,7 +279,7 @@ eval("module.exports = function(module) {\r\n\tif (!module.webpackPolyfill) {\r\
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var map = {\n\t\"./api.test.js\": \"./test/api.test.js\",\n\t\"./base64convert.test.js\": \"./test/base64convert.test.js\",\n\t\"./communication.test.js\": \"./test/communication.test.js\",\n\t\"./multi-client.test.js\": \"./test/multi-client.test.js\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\tvar module = __webpack_require__(id);\n\treturn module;\n}\nfunction webpackContextResolve(req) {\n\tvar id = map[req];\n\tif(!(id + 1)) { // check for number or string\n\t\tvar e = new Error('Cannot find module \"' + req + '\".');\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn id;\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./test sync recursive \\\\.test\\\\.js\";\n\n//# sourceURL=webpack:///./test_sync_\\.test\\.js?");
+eval("var map = {\n\t\"./api.test.js\": \"./test/api.test.js\",\n\t\"./base64convert.test.js\": \"./test/base64convert.test.js\",\n\t\"./communication.test.js\": \"./test/communication.test.js\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\tvar module = __webpack_require__(id);\n\treturn module;\n}\nfunction webpackContextResolve(req) {\n\tvar id = map[req];\n\tif(!(id + 1)) { // check for number or string\n\t\tvar e = new Error('Cannot find module \"' + req + '\".');\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn id;\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./test sync recursive \\\\.test\\\\.js\";\n\n//# sourceURL=webpack:///./test_sync_\\.test\\.js?");
 
 /***/ }),
 
@@ -313,17 +313,6 @@ eval("const {valToBase64, base64ToVal} = __webpack_require__(/*! ../base64conver
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("const reset = __webpack_require__(/*! ./reset */ \"./test/reset.js\");\nconst communication = __webpack_require__(/*! ../communication */ \"./communication.js\");\nconst assert = __webpack_require__(/*! assert */ \"./node_modules/assert/assert.js\");\n\n\nbeforeEach(reset);\n\n\nit('should be able to reset', () => {});\n\n\ndescribe('bluzelle connection', () => {\n\n    beforeEach(() =>\n        communication.connect('ws://localhost:8100'));\n\n    afterEach(() =>\n        communication.disconnect());\n\n\n    it('should be able to connect to 8100', () => {});\n\n\n    it('should be able to ping the connection', async () => {\n\n        return communication.ping();\n\n    });\n\n    it('should be able to read and update base64 strings', async () => {\n\n        await communication.update('mykey', 'abcdef');\n\n        assert(await communication.read('mykey') === 'abcdef')\n\n    });\n\n    it('should be able to query if the database has a key', async () => {\n\n        await communication.update('myKey', 'abc');\n        assert(await communication.has('myKey'));\n        assert(!await communication.has('someOtherKey'));\n\n    });\n\n    it('should be able to delete a key', async () => {\n\n        await communication.update('myKey', 'abc');\n        await communication.delete('myKey');\n        assert(!await communication.has('myKey'));\n\n    });\n\n    it('should throw an error when trying to read a non-existent key', done => {\n\n        communication.read('abc123').catch(() => done());\n\n    });\n\n    it('should throw an error when trying to delete a non-existent key', done => {\n\n        communication.delete('something').catch(() => done());\n\n    });\n\n});\n\n//# sourceURL=webpack:///./test/communication.test.js?");
-
-/***/ }),
-
-/***/ "./test/multi-client.test.js":
-/*!***********************************!*\
-  !*** ./test/multi-client.test.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("\n\n//# sourceURL=webpack:///./test/multi-client.test.js?");
 
 /***/ }),
 

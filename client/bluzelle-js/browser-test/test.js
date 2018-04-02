@@ -41,12 +41,22 @@ exec(`npx webpack --config ${__dirname}/webpage/webpack.config.js`, () => {
 
 	// Launch Chrome
 
-	exec(`google-chrome ${__dirname}/webpage/index.html`, () => {
+	if(process.platform === 'linux') {
 
-		console.log('Chrome exited. Exiting process.');
+		exec(`google-chrome ${__dirname}/webpage/index.html`, () => {
 
-		process.exit();
+			console.log('Chrome exited. Exiting process.');
 
-	});
+			process.exit();
+
+		});
+
+	} else {
+
+		// Mac
+
+		exec(`open -a "Google Chrome" ${__dirname}/webpage/index.html`);
+
+	}
 
 });

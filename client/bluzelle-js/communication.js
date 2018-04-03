@@ -150,6 +150,18 @@ const has = key => new Promise(resolve => {
 });
 
 
+const keys = () => new Promise(resolve => {
+
+    const cmd = amendBznApi({
+        cmd: 'keys'
+    });
+
+    send(cmd, obj => resolve(obj.data.value));
+
+});
+
+
+
 module.exports = {
     connect,
     disconnect,
@@ -158,7 +170,9 @@ module.exports = {
     read,
     update,
     'delete': delet, // delete is a reserved keyword
-    has
+    has,
+    keys
+
 };
 
 

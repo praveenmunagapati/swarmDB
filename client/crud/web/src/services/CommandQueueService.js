@@ -24,8 +24,7 @@ const revert = targetPosition => {
 
 commandQueue.push({
     message: 'Initial state',
-    revert: revert.bind(this, 0),
-    onSave: () => {}
+    revert: revert.bind(this, 0)
 });
 
 
@@ -46,7 +45,7 @@ export const redo = () =>
 // object, the object should have the same identity as it had before
 // undoing and redoing.
 
-export const execute = ({ doIt, undoIt, onSave = () => {}, message }) => {
+export const execute = ({ doIt, undoIt, message }) => {
     doIt();
 
     currentPosition.set(currentPosition.get() + 1);
@@ -54,7 +53,6 @@ export const execute = ({ doIt, undoIt, onSave = () => {}, message }) => {
 
     commandQueue.push({
         revert: revert.bind(this, currentPosition.get()),
-        onSave,
         doIt,
         undoIt,
         message

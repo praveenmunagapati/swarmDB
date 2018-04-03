@@ -44,13 +44,6 @@ export class KeyListItem extends Component {
             obj.delete(oldKey);
         }
 
-        function onSave(savedKeys) {
-            return {
-                [newKey]: savedKeys[keyName] || obj.get(newKey).get('bytearray'),
-                [keyName]: 'deleted'
-            };
-        }
-
         function message() {
             return <span>Renamed <code key={1}>{keyName}</code> to <code key={2}>{newKey}</code>.</span>;
         }
@@ -68,7 +61,6 @@ export class KeyListItem extends Component {
                     renameInObj(obj, newKey, keyName);
                     selectedKey.set(keyName);
                 },
-                onSave,
                 message: message()
             });
         }
@@ -77,7 +69,6 @@ export class KeyListItem extends Component {
             this.context.execute({
                 doIt: () => renameInObj(obj, keyName, newKey),
                 undoIt: () => renameInObj(obj, newKey, keyName),
-                onSave,
                 message: message()
             });
         }

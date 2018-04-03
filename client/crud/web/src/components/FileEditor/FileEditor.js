@@ -41,10 +41,7 @@ export class FileEditor extends Component {
                     props.keyData.set('bytearray', oldBytearray);
                     props.keyData.set('filename', oldFilename);
                 },
-                message: <span>Uploaded <code key={1}>{file.name}</code> to <code key={2}>{props.keyName}</code>.</span>,
-                onSave: () => ({
-                    [props.keyName]: props.keyData.get('bytearray')
-                })
+                message: <span>Uploaded <code key={1}>{file.name}</code> to <code key={2}>{props.keyName}</code>.</span>
             });
 
 

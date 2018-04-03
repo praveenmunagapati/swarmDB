@@ -15,15 +15,11 @@ export class JSONEditor extends Component {
     getChildContext() {
         const {keyData} = this.props;
 
-        return {
-            execute: args => this.context.execute({
-                onSave: () => this.onSave(keyData.get('interpreted')), ...args })
-        };
-    }
 
-    onSave(interpreted) {
+        // TODO: We can sack the context thing.
+
         return {
-            [this.props.keyName]: addPrefix(serialize(interpreted), PREFIX).slice()
+            execute: this.context.execute;
         };
     }
 

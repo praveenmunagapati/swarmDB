@@ -33,15 +33,8 @@ export class PlainTextEditor extends Component {
         this.context.execute({
             doIt: () => keyData.set('localChanges', newVal),
             undoIt: () => keyData.set('localChanges', oldVal),
-            onSave: this.onSave.bind(this, newVal),
             message: <span>Updated <code key={1}>{keyName}</code>.</span>
         });
-    }
-
-    onSave(interpreted) {
-        return {
-            [this.props.keyName]: serialize(interpreted)
-        };
     }
 
     onChange(e) {

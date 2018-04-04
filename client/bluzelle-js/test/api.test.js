@@ -20,7 +20,7 @@ describe('bluzelle api', () => {
 
 
 
-    it.only('should be able to connect many times', async () => {
+    it('should be able to connect many times', async () => {
        
         await api.connect('ws://localhost:8100');
         await api.connect('ws://localhost:8100');

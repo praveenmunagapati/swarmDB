@@ -1,13 +1,35 @@
 const {observable, toJS, observe} = require('mobx');
-const {forEach} = require('lodash');
+const {forEach, includes} = require('lodash');
 const {nodes} = require('./NodeStore');
 
 
-const data = observable.map({});
+const uuids = [];
+const createDb = uuid => eval('db_' + uuid + '= observable.map({})');
+const buildDbName = uuid => eval('db_' + uuid);
+
+// Need to add `setup` call from js-library and crud client.
+createDb('1234567890');
+createDb('0000');
 
 module.exports = {
+    uuids: uuids,
 
-    read: ({request_id, data:{key}}, ws) => {
+    setup: ({uuid, request_id}) => {
+        if (!includes(uuids, uuid)) {
+            uuids.push(uuid);
+            createDb(uuid);
+        } else {
+            ws.send(JSON.stringify(
+                {
+                    error: `Sorry, the uuid, ${uuid}, is already taken.`,
+                    response_to: request_id
+                }
+            ));
+        };
+    },
+
+    read: ({uuid, request_id, data:{key}}, ws) => {
+        let data = buildDbName(uuid);
 
         if(data.has(key)) {
 
@@ -35,7 +57,9 @@ module.exports = {
         }
     },
 
-    update: ({request_id, data:{key, value}}, ws) => {
+    update: ({uuid, request_id, data:{key, value}}, ws) => {
+        let data = buildDbName(uuid);
+
         data.set(key, value);
 
         ws.send(JSON.stringify(
@@ -45,7 +69,9 @@ module.exports = {
         ));
     },
 
-    has: ({request_id, data:{key}}, ws) => {
+    has: ({uuid, request_id, data:{key}}, ws) => {
+        let data = buildDbName(uuid);
+
         ws.send(JSON.stringify(
             {
                 data: 
@@ -57,7 +83,8 @@ module.exports = {
         ));
     },
 
-    'delete': ({request_id, data:{key}}, ws) => {
+    'delete': ({uuid, request_id, data:{key}}, ws) => {
+        let data = buildDbName(uuid);
 
         if(data.has(key)) {
 
@@ -82,8 +109,11 @@ module.exports = {
 
     },
 
-    getData: () => data,
-    setData: obj => {
+    getData: (uuid) =>
+        buildDbName(uuid),
+    setData: (uuid, obj) => {
+        let data = buildDbName(uuid);
+
         data.clear();
         data.merge(obj);
     }

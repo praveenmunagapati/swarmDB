@@ -35,7 +35,7 @@ export class TypeModal extends Component {
             undoIt: () => {
                 selectedKey.set(oldSelection);
                 obj.delete(keyField)
-            }
+            },
             message: <span>Created <code key={1}>{keyField}</code> as {typeName}.</span>
         });
 

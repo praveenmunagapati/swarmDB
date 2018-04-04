@@ -2,9 +2,9 @@ export const RefreshButton = ({keyData}) => {
     return (
         <BS.OverlayTrigger placement="bottom" overlay={
             <BS.Tooltip id="refresh-tooltip">
-                Began editing at: {new Date(keyData.get('beginEditingTimestamp')).toLocaleTimeString()}.
+                Downloaded version: {new Date(keyData.get('beginEditingTimestamp')).toLocaleTimeString()}.
                 <br/>
-                Most recent version: {new Date(keyData.get('mostRecentTimestamp')).toLocaleTimeString()}.
+                Current time: {new Date().toLocaleTimeString()}.
             </BS.Tooltip>
         }>
             <div style={{
@@ -14,7 +14,9 @@ export const RefreshButton = ({keyData}) => {
                 <BS.Glyphicon glyph='refresh'
                               onClick={(e) => {
                                   e.stopPropagation();
-                                  keyData.clear();
+                                  
+                                  // Placeholder
+
                               }}
                               style={{
                                   verticalAlign: 'middle'

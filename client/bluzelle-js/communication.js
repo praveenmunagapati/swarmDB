@@ -44,12 +44,19 @@ const connect = addr => {
 
 const onMessage = (event, socket) => {
 
+    if(event.response_to === undefined) {
+
+        debugger;
+        throw new Error('Recieved non-response message.');
+
+    }
+
     resolvers.get(event.response_to)(event);
-    resolvers.delete(event.response_to);
 
 };
 
 
+// TODO: return promise
 
 const disconnect = () => {
     for(let connection of connections.values()) {
@@ -79,6 +86,8 @@ const amendRequestID = (() => {
 const send = (obj, resolver) => {
 
     const message = amendRequestID(obj);
+
+    debugger;
 
     resolvers.set(message.request_id, resolver);
 

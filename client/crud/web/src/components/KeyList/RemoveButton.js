@@ -19,7 +19,7 @@ export class RemoveButton extends Component {
                 undoIt: () => {
                     obj.set(oldKey, oldObj);
                     selectedKey.set(oldKey);
-                }
+                },
                 message: <span>Deleted <code key={1}>{oldKey}</code></span>
             });
         }

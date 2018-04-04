@@ -19,7 +19,7 @@ export class JSONEditor extends Component {
         // TODO: We can sack the context thing.
 
         return {
-            execute: this.context.execute;
+            execute: this.context.execute
         };
     }
 

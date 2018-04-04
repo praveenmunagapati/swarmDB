@@ -19,6 +19,16 @@ describe('bluzelle api', () => {
         a.length === b.length && !a.some((v, i) => b[i] !== v);
 
 
+
+    it.only('should be able to connect many times', async () => {
+       
+        await api.connect('ws://localhost:8100');
+        await api.connect('ws://localhost:8100');
+        await api.connect('ws://localhost:8100');
+
+    });
+
+
     it('should be able to create and read number fields', async () => {
 
         await api.update('myKey', 123);
@@ -40,7 +50,7 @@ describe('bluzelle api', () => {
 
     });
 
-    it.only('should be able to get a list of keys', async () => {
+    it('should be able to get a list of keys', async () => {
 
         await api.update('hello123', 10);
         await api.update('test', 11);

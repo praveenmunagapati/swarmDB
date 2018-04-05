@@ -2,6 +2,7 @@ import {enableExecution} from "../../services/CommandQueueService";
 import {KeyListItem} from "./KeyListItem";
 import {RemoveButton} from "./RemoveButton";
 import {NewKeyField} from "./NewKey/NewKeyField";
+import {isActive} from '../../services/CRUDService';
 
 import {keys as getKeys} from 'bluzelle';
 
@@ -14,9 +15,9 @@ export const refresh = () =>
     getKeys().then(k => keys.replace(k));
 
 
-@enableExecution
 @observer
 export class KeyList extends Component {
+
     constructor(props) {
         super(props);
 
@@ -37,18 +38,23 @@ export class KeyList extends Component {
     render() {
 
         const keyList = keys.sort().map(keyname =>
-            <KeyListItem key={keyname} {...{keyname}}/>);
+            <KeyListItem key={keyname} keyname={keyname}/>);
 
         return (
             <div style={{padding: 10}}>
                 <BS.ListGroup>
+
                     {keyList}
+
                     { this.state.showNewKey &&
                         <NewKeyField onChange={() => this.setState({showNewKey: false})}/> }
+                
                 </BS.ListGroup>
                 <BS.ButtonGroup>
+
                     <AddButton onClick={() => this.setState({showNewKey: true})}/>
-                    <RemoveButton/>
+                   {/* <RemoveButton/>*/}
+
                 </BS.ButtonGroup>
             </div>
         );

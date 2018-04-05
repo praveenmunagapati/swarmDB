@@ -1,8 +1,9 @@
 import {Editor} from "./Editor";
-import {selectedKey, KeyList} from "./KeyList";
+import {KeyList} from "./KeyList";
 import {Header} from "./Header/Header";
 import 'bootstrap/dist/css/bootstrap.css';
 import {CommandControls} from "./CommandControls";
+
 
 @observer
 export class Main extends Component {
@@ -16,15 +17,17 @@ export class Main extends Component {
                 <ReflexElement flex={1}>
                     <ReflexContainer orientation='vertical'>
                         <ReflexElement flex={0.4}>
+
                             <CommandControls/>
-
                             <hr/>
-
                             <KeyList/>
+
                         </ReflexElement>
                         <ReflexSplitter/>
                         <ReflexElement>
-                            {selectedKey.get() && <Editor obj={obj}/>}
+
+                            <Editor/>
+
                         </ReflexElement>
                     </ReflexContainer>
                 </ReflexElement>

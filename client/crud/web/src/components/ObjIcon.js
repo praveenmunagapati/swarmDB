@@ -8,3 +8,21 @@ export const JSONIcon =
     }}>
         {'{}'}
     </span>;
+
+
+export const ValIcon = ({val}) => {
+
+	if(typeof val === 'string') {
+
+		return <TextIcon/>;
+
+	}
+
+
+	if(typeof val === 'object') {
+
+		return <JSONIcon/>;
+
+	}
+
+};

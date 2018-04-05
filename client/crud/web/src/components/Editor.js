@@ -2,35 +2,35 @@ import {JSONEditor} from "./JSONEditor";
 import {PlainTextEditor} from './PlainTextEditor';
 import {FileEditor} from "./FileEditor/FileEditor";
 
-import {obsevableMapRecursive as omr} from '../util/mobXUtils.js';
+import {obsevableMapRecursive as omr} from '../util/mobXUtils';
+
+import {activeValue} from '../services/CRUDService';
 
 
-export const Editor = ({value}) => {
+@observer
+export class Editor extends Component {
 
-    const type = typeof value;
+    render() {
+
+        const type = typeof activeValue.get();
 
 
-    if(type === 'object') {
+        if(type === 'object') {
 
-        return <JSONEditor value={omr(value)}/>;
+            return <JSONEditor/>;
+
+        }
+
+
+        if(type === 'string') {
+
+            return <PlainTextEditor/>;
+
+        }
+
+
+        return <div>No Editor for this data type.</div>;
 
     }
-
-
-    if(type === 'string') {
-
-        return <PlainTextEditor value={value}/>;
-
-    }
-
-
-    if(type === 'undefined') {
-
-        return <div>Loading...</div>;
-
-    }
-
-
-    return <div>No Editor for this data type.</div>;
 
 };

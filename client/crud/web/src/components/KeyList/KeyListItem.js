@@ -78,17 +78,12 @@ export class KeyListItem extends Component {
 
     render() {
 
-        const {obj, keyname} = this.props;
+        const {keyname} = this.props;
 
         return (
             <BS.ListGroupItem
                 onClick={() => selectedKey.get() === keyname ? this.select(null) : this.select(keyname)}
-                active={selectedKey.get() === keyname}
-
-                // TODO: fix this error
-                // This line gives error?
-                bsStyle={hasMoreRecentVersion(obj.get(keyname)) ? 'info' : null}
-                >
+                active={selectedKey.get() === keyname}>
 
                 <span style={{display: 'inline-block', width: 25}}>
                     <ObjIcon keyData={obj.get(keyname)}/>
@@ -113,8 +108,3 @@ export class KeyListItem extends Component {
             </BS.ListGroupItem>);
     }
 }
-
-const hasMoreRecentVersion = keyData =>
-    keyData.has('mostRecentTimestamp')
-    && keyData.has('beginEditingTimestamp')
-    && keyData.get('mostRecentTimestamp') > keyData.get('beginEditingTimestamp');

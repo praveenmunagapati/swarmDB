@@ -1,45 +1,51 @@
-import {defaultKeyData as jsonDefault} from "../../JSONEditor";
-import {defaultKeyData as textDefault} from "../../PlainTextEditor";
-import {defaultKeyData as fileDefault} from "../../FileEditor/FileEditor";
-
-import {ObjIcon} from "../../ObjIcon";
+import {ObjIcon, TextIcon, FileIcon} from "../../ObjIcon";
 import {enableExecution} from "../../../services/CommandQueueService";
-import {selectedKey} from "../KeyList";
+import {selectedKey, refresh} from "../KeyList";
+import {update, remove} from 'bluzelle';
 
 
 @enableExecution
 export class TypeModal extends Component {
 
     chooseJSON() {
-        this.addNewKey(jsonDefault(), 'JSON');
+        this.addNewKey({}, 'JSON');
     }
 
     chooseText() {
-        this.addNewKey(textDefault(), 'plain text');
+        this.addNewKey('', 'plain text');
     }
 
     chooseFile() {
-        this.addNewKey(fileDefault(), 'file');
+        this.addNewKey('', 'file');
     }
 
+
     addNewKey(keyData, typeName) {
-        const {obj, keyField} = this.props;
+
         const oldSelection = selectedKey.get();
-        const serial = keyData.get('bytearray').slice();
+
+
+        // Would we have to revise execution to do async/await?
+        // For now, let's not. But consider it for the future.
+
+        // In fact we should, but for now it's non-essential
+        // provided our actions have decent timesteps.
+
 
         this.context.execute({
-            doIt: () => {
-                obj.set(keyField, keyData);
-                selectedKey.set(keyField);
-            },
-            undoIt: () => {
-                selectedKey.set(oldSelection);
-                obj.delete(keyField)
-            },
+
+            doIt: () => 
+                update(this.props.keyField, keyData).then(refresh),
+
+            undoIt: () => 
+                remove(this.props.keyField).then(refresh),
+
             message: <span>Created <code key={1}>{keyField}</code> as {typeName}.</span>
+        
         });
 
         this.props.onHide();
+
     }
 
 
@@ -54,15 +60,15 @@ export class TypeModal extends Component {
                 <BS.Modal.Body>
                     <BS.ListGroup>
                         <BS.ListGroupItem onClick={this.chooseJSON.bind(this)}>
-                            <ObjIcon keyData={jsonDefault()}/>
+                            <ObjIcon/>
                             JSON Data
                         </BS.ListGroupItem>
                         <BS.ListGroupItem onClick={this.chooseText.bind(this)}>
-                            <ObjIcon keyData={textDefault()}/>
+                            <TextIcon/>
                             Plain Text
                         </BS.ListGroupItem>
                         <BS.ListGroupItem onClick={this.chooseFile.bind(this)}>
-                            <ObjIcon keyData={fileDefault()}/>
+                            <FileIcon/>
                             File
                         </BS.ListGroupItem>
                     </BS.ListGroup>

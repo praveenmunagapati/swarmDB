@@ -1,5 +1,4 @@
 import {Editor} from "./Editor";
-import {getLocalDataStore} from '../services/DataService';
 import {selectedKey, KeyList} from "./KeyList";
 import {Header} from "./Header/Header";
 import 'bootstrap/dist/css/bootstrap.css';
@@ -8,9 +7,6 @@ import {CommandControls} from "./CommandControls";
 @observer
 export class Main extends Component {
     render() {
-
-        const obj = getLocalDataStore();
-
         return (
             <ReflexContainer style={{height: '100%'}}>
                 <ReflexFixed>
@@ -24,11 +20,11 @@ export class Main extends Component {
 
                             <hr/>
 
-                            <KeyList obj={obj}/>
+                            <KeyList/>
                         </ReflexElement>
                         <ReflexSplitter/>
                         <ReflexElement>
-                            {obj.has(selectedKey.get()) && <Editor obj={obj}/>}
+                            {selectedKey.get() && <Editor obj={obj}/>}
                         </ReflexElement>
                     </ReflexContainer>
                 </ReflexElement>

@@ -13,8 +13,7 @@ import DevTools from 'mobx-react-devtools';
 // configureDevtool({logEnabled: true});
 
 
-import {getLocalDataStore} from '../services/DataService';
-import {connect, keys} from 'bluzelle';
+import {connect} from 'bluzelle';
 
 
 @observer
@@ -23,9 +22,9 @@ export class App extends Component {
 
     componentWillMount() {
 
-        this.state = {
+        this.setState({
             connected: false
-        };
+        });
 
     }
 
@@ -43,26 +42,12 @@ export class App extends Component {
                 connected: true
             });
 
-        
-
-            keys().then(keys => {
-
-                const data = getLocalDataStore();
-
-                keys.forEach(key => data.set(key, null));
-
-            });
-
         });
 
     }
 
 
     render() {
-
-        const data = getLocalDataStore();
-
-        window.data = data;
 
         return (
             <div style={{height: '100%'}}>

@@ -3,7 +3,16 @@ import {KeyListItem} from "./KeyListItem";
 import {RemoveButton} from "./RemoveButton";
 import {NewKeyField} from "./NewKey/NewKeyField";
 
+import {keys as getKeys} from 'bluzelle';
+
 export const selectedKey = observable(null);
+
+
+const keys = observable([]);
+
+export const refresh = () => 
+    getKeys().then(k => keys.replace(k));
+
 
 @enableExecution
 @observer
@@ -14,24 +23,32 @@ export class KeyList extends Component {
         this.state = {
             showNewKey: false
         };
+
     }
 
-    render() {
-        const {obj} = this.props;
 
-        const keyList = obj.keys().sort().map(keyname =>
-            <KeyListItem key={keyname} {...{keyname, obj}}/>);
+    componentWillMount() {
+
+        refresh();
+
+    }
+
+
+    render() {
+
+        const keyList = keys.sort().map(keyname =>
+            <KeyListItem key={keyname} {...{keyname}}/>);
 
         return (
             <div style={{padding: 10}}>
                 <BS.ListGroup>
                     {keyList}
                     { this.state.showNewKey &&
-                        <NewKeyField onChange={() => this.setState({showNewKey: false})} obj={obj}/> }
+                        <NewKeyField onChange={() => this.setState({showNewKey: false})}/> }
                 </BS.ListGroup>
                 <BS.ButtonGroup>
                     <AddButton onClick={() => this.setState({showNewKey: true})}/>
-                    <RemoveButton obj={obj}/>
+                    <RemoveButton/>
                 </BS.ButtonGroup>
             </div>
         );

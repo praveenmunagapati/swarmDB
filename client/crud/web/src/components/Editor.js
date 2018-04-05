@@ -1,55 +1,36 @@
-import {getPrefix} from "./keyData";
-import {JSONEditor, PREFIX as jsonPrefix} from "./JSONEditor";
-import {PlainTextEditor, PREFIX as textPrefix} from './PlainTextEditor';
-import {FileEditor, PREFIX as filePrefix} from "./FileEditor/FileEditor";
-import {selectedKey} from "./KeyList";
-import {sendToNodes} from "bluzelle-client-common/services/CommunicationService";
+import {JSONEditor} from "./JSONEditor";
+import {PlainTextEditor} from './PlainTextEditor';
+import {FileEditor} from "./FileEditor/FileEditor";
+
+import {obsevableMapRecursive as omr} from '../util/mobXUtils.js';
 
 
-@observer
-export class Editor extends Component {
+export const Editor = ({value}) => {
 
-    dataLoaded() {
-        return this.props.obj.get(selectedKey.get()).has('bytearray');
-    }
+    const type = typeof value;
 
-    loadData() {
-        sendToNodes('read', {key: selectedKey.get()});
-    }
 
-    render() {
+    if(type === 'object') {
 
-        const {obj} = this.props;
-
-        if(this.dataLoaded()) {
-            return <EditorSwitch obj={obj}/>
-        } else {
-            this.loadData();
-            return <Loading/>;
-        }
+        return <JSONEditor value={omr(value)}/>;
 
     }
-}
 
 
-const Loading = () => (
-    <div>
-        Fetching data...
-    </div>
-);
+    if(type === 'string') {
 
-const EditorSwitch = ({obj}) => {
-    const keyData = obj.get(selectedKey.get());
-    const type = getPrefix(keyData);
+        return <PlainTextEditor value={value}/>;
 
-    return (
-        <React.Fragment>
-            {type === jsonPrefix && 
-                <JSONEditor keyData={keyData} keyName={selectedKey.get()} key={selectedKey.get()}/>}
-            {type === textPrefix &&
-                <PlainTextEditor keyData={keyData} keyName={selectedKey.get()} key={selectedKey.get()}/>}
-            {type === filePrefix &&
-                <FileEditor keyData={keyData} keyName={selectedKey.get()} key={selectedKey.get()}/>}
-        </React.Fragment>
-    );
+    }
+
+
+    if(type === 'undefined') {
+
+        return <div>Loading...</div>;
+
+    }
+
+
+    return <div>No Editor for this data type.</div>;
+
 };

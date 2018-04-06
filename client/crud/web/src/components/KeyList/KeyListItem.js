@@ -71,25 +71,15 @@ export class KeyListItem extends Component {
         return (
 
             <BS.ListGroupItem
-                onClick={() => selectedKey.get() === keyname ? this.select(null) : this.select(keyname)}
+                onClick={() => selectedKey.get() === keyname ? this.select(undefined) : this.select(keyname)}
                 active={selectedKey.get() === keyname}>
 
-                {
-
-                    activeValue.get() !== null &&
-
-                        <span style={{display: 'inline-block', width: 25}}>
-                            <ValIcon val={activeValue.get()}/>
-                        </span>
-
-                        // Plus save button & refresh button
-                        // Can probably go into its own component
-
-                }
+                <Icon keyname={keyname}/>
 
                 <EditableField
                     val={keyname}
                     onChange={this.rename.bind(this)}/>
+
 
                 {
 
@@ -106,3 +96,20 @@ export class KeyListItem extends Component {
         );
     }
 }
+
+
+const Icon = observer(({keyname}) =>
+
+    <span style={{display: 'inline-block', width: 25}}>
+        {
+
+            activeValue.get() !== undefined &&
+            selectedKey.get() === keyname &&
+
+                <ValIcon val={activeValue.get()}/>
+                
+
+        }
+    </span>
+
+);

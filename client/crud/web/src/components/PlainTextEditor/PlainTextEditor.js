@@ -7,14 +7,16 @@ export class PlainTextEditor extends Component {
     constructor() {
         super();
 
-        this.state = activeValue.get();
+        this.state = {
+            value: activeValue.get()
+        };
 
     }
 
     onSubmit(e) {
         e && e.preventDefault();
 
-        activeValue.set(this.state);
+        activeValue.set(this.state.value);
 
 
         // const {keyName, keyData} = this.props;
@@ -32,7 +34,9 @@ export class PlainTextEditor extends Component {
 
     onChange(e) {
 
-        this.setState(e.target.value);
+        this.setState({
+            value: e.target.value
+        });
 
     }
 
@@ -47,7 +51,7 @@ export class PlainTextEditor extends Component {
                         style={{height: '100%', resize: 'none'}}
                         componentClass="textarea"
 
-                        value={this.state}
+                        value={this.state.value}
 
                         onChange={this.onChange.bind(this)}
 

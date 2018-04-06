@@ -2,9 +2,9 @@ import {enableExecution} from "../../services/CommandQueueService";
 import {KeyListItem} from "./KeyListItem";
 import {RemoveButton} from "./RemoveButton";
 import {NewKeyField} from "./NewKey/NewKeyField";
-import {isActive} from '../../services/CRUDService';
+import {activeValue} from '../../services/CRUDService';
 
-import {keys as getKeys} from 'bluzelle';
+import {keys as getKeys, update} from 'bluzelle';
 
 export const selectedKey = observable(null);
 
@@ -50,12 +50,17 @@ export class KeyList extends Component {
                         <NewKeyField onChange={() => this.setState({showNewKey: false})}/> }
                 
                 </BS.ListGroup>
-                <BS.ButtonGroup>
 
-                    <AddButton onClick={() => this.setState({showNewKey: true})}/>
-                   {/* <RemoveButton/>*/}
 
-                </BS.ButtonGroup>
+                <BS.ButtonToolbar>
+                    <BS.ButtonGroup>
+
+                        <AddButton onClick={() => this.setState({showNewKey: true})}/>
+
+                    </BS.ButtonGroup>
+
+                    <SaveReload/>
+                </BS.ButtonToolbar>
             </div>
         );
     }
@@ -66,3 +71,35 @@ const AddButton = ({onClick}) => (
         <BS.Glyphicon glyph='plus'/>
     </BS.Button>
 );
+
+
+const SaveReload = observer(({keyname}) =>
+
+    activeValue.get() !== undefined &&
+
+        <BS.ButtonGroup>
+            <BS.Button onClick={save}>
+                <BS.Glyphicon glyph='floppy-save'/>
+            </BS.Button>
+            <BS.Button onClick={reload}>
+                <BS.Glyphicon glyph='refresh'/>
+            </BS.Button>
+        </BS.ButtonGroup>
+
+    : null
+
+);
+
+
+const save = () => 
+    update(selectedKey.get(), activeValue.get());
+
+const reload = () => {
+
+    const sk = selectedKey.get();
+    selectedKey.set();
+    selectedKey.set(sk);
+
+}
+
+

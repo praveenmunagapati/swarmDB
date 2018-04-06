@@ -1,10 +1,8 @@
-import {ObjIcon, TextIcon, FileIcon} from "../../ObjIcon";
-import {enableExecution} from "../../../services/CommandQueueService";
+import {JSONIcon, TextIcon, FileIcon} from "../../ObjIcon";
 import {selectedKey, refresh} from "../KeyList";
 import {update, remove} from 'bluzelle';
 
 
-@enableExecution
 export class TypeModal extends Component {
 
     chooseJSON() {
@@ -13,10 +11,6 @@ export class TypeModal extends Component {
 
     chooseText() {
         this.addNewKey('', 'plain text');
-    }
-
-    chooseFile() {
-        this.addNewKey('', 'file');
     }
 
 
@@ -32,17 +26,19 @@ export class TypeModal extends Component {
         // provided our actions have decent timesteps.
 
 
-        this.context.execute({
+        update(this.props.keyField, keyData).then(refresh);
 
-            doIt: () => 
-                update(this.props.keyField, keyData).then(refresh),
+        // this.context.execute({
 
-            undoIt: () => 
-                remove(this.props.keyField).then(refresh),
+        //     doIt: () => 
+        //         update(this.props.keyField, keyData).then(refresh),
 
-            message: <span>Created <code key={1}>{keyField}</code> as {typeName}.</span>
+        //     undoIt: () => 
+        //         remove(this.props.keyField).then(refresh),
+
+        //     message: <span>Created <code key={1}>{keyField}</code> as {typeName}.</span>
         
-        });
+        // });
 
         this.props.onHide();
 
@@ -60,16 +56,12 @@ export class TypeModal extends Component {
                 <BS.Modal.Body>
                     <BS.ListGroup>
                         <BS.ListGroupItem onClick={this.chooseJSON.bind(this)}>
-                            <ObjIcon/>
+                            <JSONIcon/>
                             JSON Data
                         </BS.ListGroupItem>
                         <BS.ListGroupItem onClick={this.chooseText.bind(this)}>
                             <TextIcon/>
                             Plain Text
-                        </BS.ListGroupItem>
-                        <BS.ListGroupItem onClick={this.chooseFile.bind(this)}>
-                            <FileIcon/>
-                            File
                         </BS.ListGroupItem>
                     </BS.ListGroup>
                 </BS.Modal.Body>

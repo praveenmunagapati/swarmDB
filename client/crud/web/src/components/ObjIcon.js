@@ -1,7 +1,10 @@
-export const TextIcon = <BS.Glyphicon glyph='font'/>;
-export const FileIcon = <BS.Glyphicon glyph='file'/>;
+export const TextIcon = () => 
+	<BS.Glyphicon glyph='font'/>;
 
-export const JSONIcon = 
+export const FileIcon = () => 
+	<BS.Glyphicon glyph='file'/>;
+
+export const JSONIcon = () =>
     <span style={{
         fontWeight: 'bold',
         fontFamily: 'monospace'
@@ -24,5 +27,7 @@ export const ValIcon = ({val}) => {
 		return <JSONIcon/>;
 
 	}
+
+	return <BS.Glyphicon glyph='question-sign'/>;
 
 };

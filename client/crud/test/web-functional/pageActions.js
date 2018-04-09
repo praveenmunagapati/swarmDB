@@ -11,6 +11,9 @@ export const newField = (name, type) => {
     browser.waitForExist('button*=' + type);
     browser.element('button*=' + type).click();
 
+    browser.waitForExist('button*=' + name);
+    browser.click('button*=' + name);
+
 };
 
 

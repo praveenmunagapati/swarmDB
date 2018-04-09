@@ -39,7 +39,7 @@ export const observableMapRecursive = obj => {
 
 
 const onChange = () => {
-    
+
     const v = activeValue.get();
 
     for(let prop in v) { 
@@ -62,24 +62,6 @@ observe(activeValue, ({newValue}) => {
 
 });
 
-
-
-
-
-
-// Get it working first
-
-
-
-// Amend omr with observers to call `onChange`.
-
-// We want this to be recursive all the way down to simple changes.
-
-// observe(activeObservableMap, )
-
-
-
-// We pass down get(), set(), and del().
 
 
 @observer

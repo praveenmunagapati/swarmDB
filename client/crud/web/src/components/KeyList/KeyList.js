@@ -4,7 +4,7 @@ import {RemoveButton} from "./RemoveButton";
 import {NewKeyField} from "./NewKey/NewKeyField";
 import {activeValue} from '../../services/CRUDService';
 
-import {keys as getKeys, update} from 'bluzelle';
+import {keys as getKeys, update, remove} from 'bluzelle';
 
 export const selectedKey = observable(null);
 
@@ -59,7 +59,7 @@ export class KeyList extends Component {
 
                     </BS.ButtonGroup>
 
-                    <SaveReload/>
+                    <SaveReloadRemove/>
                 </BS.ButtonToolbar>
             </div>
         );
@@ -73,32 +73,52 @@ const AddButton = ({onClick}) =>
     </BS.Button>;
 
 
-const SaveReload = observer(({keyname}) =>
-
-    activeValue.get() !== undefined &&
+const SaveReloadRemove = observer(({keyname}) =>
 
         <BS.ButtonGroup>
-            <BS.Button onClick={save}>
-                <BS.Glyphicon glyph='floppy-save'/>
-            </BS.Button>
-            <BS.Button onClick={reload}>
+           <BS.Button onClick={reload}>
                 <BS.Glyphicon glyph='refresh'/>
             </BS.Button>
-        </BS.ButtonGroup>
 
-    : null
+            {
 
-);
+                activeValue.get() !== undefined &&
+                
+                <React.Fragment>
+                    <BS.Button onClick={save}>
+                        <BS.Glyphicon glyph='floppy-save'/>
+                    </BS.Button>
+                    <BS.Button onClick={removeKey}>
+                        <BS.Glyphicon glyph='remove'/>
+                    </BS.Button>
+                </React.Fragment>
+
+            }
+
+        </BS.ButtonGroup>);
 
 
 const save = () => 
     update(selectedKey.get(), activeValue.get());
 
+const removeKey = () => 
+    remove(selectedKey.get()).then(() => 
+        reload());
+
 const reload = () => {
 
-    const sk = selectedKey.get();
-    selectedKey.set();
-    selectedKey.set(sk);
+    refresh().then(keys => {
+
+        const sk = selectedKey.get(); 
+        selectedKey.set();
+
+        if(sk in keys) {
+
+            selectedKey.set(sk);
+
+        }
+
+    });
 
 }
 

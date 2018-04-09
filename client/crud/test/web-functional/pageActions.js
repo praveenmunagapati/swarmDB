@@ -22,6 +22,8 @@ export const save = () =>
 
 export const remove = name => {
     browser.element('button*=' + name).click();
+
+    browser.waitForExist('.glyphicon-remove');
     browser.element('.glyphicon-remove').click();
 };
 

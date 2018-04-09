@@ -2,7 +2,7 @@ import {start, setData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {newField, setJSON} from "../pageActions";
 
-describe.only('JSON Editor functionality.', () => {
+describe('JSON Editor functionality.', () => {
 
     before(() => start());
 

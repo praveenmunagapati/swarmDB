@@ -66,11 +66,11 @@ export class KeyList extends Component {
     }
 }
 
-const AddButton = ({onClick}) => (
+const AddButton = ({onClick}) => 
+
     <BS.Button onClick={onClick} style={{color: 'green'}}>
         <BS.Glyphicon glyph='plus'/>
-    </BS.Button>
-);
+    </BS.Button>;
 
 
 const SaveReload = observer(({keyname}) =>

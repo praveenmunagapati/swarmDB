@@ -112,7 +112,7 @@ const reload = () => {
         const sk = selectedKey.get(); 
         selectedKey.set();
 
-        if(sk in keys) {
+        if(keys.includes(sk)) {
 
             selectedKey.set(sk);
 

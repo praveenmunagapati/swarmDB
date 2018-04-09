@@ -3,7 +3,7 @@ import {reset, checkUndo} from "../util";
 import {findComponentsTest} from "react-functional-test";
 import {hasKey, hasNoKey, newField, remove, save, selectKey, setJSON, refresh} from "../pageActions";
 
-describe.only('Multi-client functionality.', () => {
+describe('Multi-client functionality.', () => {
 
     let firstWindow = null,
         secondWindow = null;

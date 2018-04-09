@@ -2,7 +2,7 @@ const WebSocket = require('isomorphic-ws');
 
 const connections = new Set();
 const resolvers = new Map();
-
+var uuid;
 
 const ping = () => new Promise(resolve => {
 
@@ -14,7 +14,8 @@ const ping = () => new Promise(resolve => {
 });
 
 
-const connect = addr => {
+const connect = (addr, id) => {
+    uuid = id;
 
     return new Promise(resolve => {
 
@@ -63,6 +64,11 @@ const amendBznApi = obj =>
         'bzn-api': 'crud'
     });
 
+const amendUuid = (uuid, obj) =>
+    Object.assign(obj, {
+        'uuid': uuid
+    });
+
 
 const amendRequestID = (() => {
 
@@ -78,7 +84,7 @@ const amendRequestID = (() => {
 
 const send = (obj, resolver) => {
 
-    const message = amendRequestID(obj);
+    const message = amendUuid(uuid , amendRequestID(obj));
 
     resolvers.set(message.request_id, resolver);
 
@@ -151,6 +157,7 @@ const has = key => new Promise(resolve => {
 
 
 module.exports = {
+    uuid: uuid,
     connect,
     disconnect,
     ping,

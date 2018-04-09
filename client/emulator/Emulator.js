@@ -4,9 +4,7 @@ const Node = require('./Node');
 const fp = require('lodash/fp');
 const {maxNodes, behaveRandomly} = require('./Values');
 const CommandProcessors = require('./CommandProcessors');
-const {getData, setData} = require('./DataStore.js');
-const {setup} = require('./DataStore');
-var {uuids} = require('./DataStore');
+const {getData, setData, setup, uuids} = require('./DataStore.js');
 
 require.main === module && setTimeout(start);
 
@@ -15,7 +13,7 @@ const nodes = require('./NodeStore').nodes;
 let initialStartPort;
 let lastPort;
 let randomBehavior = false;
-let defaultUuid = '1234567890';
+let defaultUuid = '1111';
 
 module.exports = {
     getNodes: () => nodes.values(),
@@ -28,13 +26,15 @@ module.exports = {
     },
     start: _.once(start),
     getData: getData(uuid = defaultUuid),
-    setData: setData(uuid = defaultUuid),
+    setData: () => setData(uuid = defaultUuid),
     behaveRandomly: (v) => behaveRandomly.set(v),
     isRandom: () => behaveRandomly.get()
 };
 
 module.exports.reset = async function(uuid) {
-
+    // uuids.clear();
+    console.log(`******* RESET *******`);
+    setup({uuid: '2222'});
     this.start();
 
     await Promise.all(this.shutdown());
@@ -55,7 +55,7 @@ module.exports.reset = async function(uuid) {
 
 
 
-function start(startPort = 8100) {
+function start(startPort = 8100, uuid = defaultUuid) {
     initialStartPort = lastPort = startPort;
     module.exports.wasStarted = true;
 
@@ -72,7 +72,7 @@ function start(startPort = 8100) {
         setTimeout(checkNeedLessNodes, 250);
     }());
 
-    setup({uuid: '1234567890', request_id: 'something'});
+    setup({uuid: uuid});
 }
 
 

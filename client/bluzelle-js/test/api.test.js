@@ -3,13 +3,10 @@ const api = require('../api');
 const assert = require('assert');
 
 
-beforeEach(reset);
-
-
 describe('bluzelle api', () => {
 
     beforeEach(() =>
-        api.connect('ws://localhost:8100'));
+        api.connect('ws://localhost:8100', '2222'));
 
     afterEach(() =>
         api.disconnect());

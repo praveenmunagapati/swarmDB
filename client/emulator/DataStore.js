@@ -1,35 +1,37 @@
 const {observable, toJS, observe} = require('mobx');
-const {forEach, includes} = require('lodash');
+const {forEach} = require('lodash');
 const {nodes} = require('./NodeStore');
 
 
-const uuids = [];
-const createDb = uuid => eval('db_' + uuid + '= observable.map({})');
-const buildDbName = uuid => eval('db_' + uuid);
+const uuids = observable.map({});
+const createDb = uuid => uuids.set(uuid, observable.map({}));
+const retrieveDb = uuid => uuids.get(uuid);
 
-// Need to add `setup` call from js-library and crud client.
-createDb('1234567890');
-createDb('0000');
+// Need to refactor
+// createDb('1111');
 
 module.exports = {
     uuids: uuids,
 
-    setup: ({uuid, request_id}) => {
-        if (!includes(uuids, uuid)) {
-            uuids.push(uuid);
+    setup: ({uuid, request_id}, ws) => {
+        if (!uuids.has(uuid)) {
             createDb(uuid);
+
+            console.log(`******* SETUP: DB created ${uuid}`)
         } else {
-            ws.send(JSON.stringify(
-                {
-                    error: `Sorry, the uuid, ${uuid}, is already taken.`,
-                    response_to: request_id
-                }
-            ));
+            console.log(`******* SETUP: ${uuid} in already in uuids ********`)
+            // ws is undefined
+            // ws.send(JSON.stringify(
+            //     {
+            //         error: `Sorry, the uuid, ${uuid}, is already taken.`,
+            //         response_to: request_id
+            //     }
+            // ));
         };
     },
 
     read: ({uuid, request_id, data:{key}}, ws) => {
-        let data = buildDbName(uuid);
+        let data = retrieveDb(uuid);
 
         if(data.has(key)) {
 
@@ -58,7 +60,7 @@ module.exports = {
     },
 
     update: ({uuid, request_id, data:{key, value}}, ws) => {
-        let data = buildDbName(uuid);
+        let data = retrieveDb(uuid);
 
         data.set(key, value);
 
@@ -70,7 +72,7 @@ module.exports = {
     },
 
     has: ({uuid, request_id, data:{key}}, ws) => {
-        let data = buildDbName(uuid);
+        let data = retrieveDb(uuid);
 
         ws.send(JSON.stringify(
             {
@@ -84,7 +86,7 @@ module.exports = {
     },
 
     'delete': ({uuid, request_id, data:{key}}, ws) => {
-        let data = buildDbName(uuid);
+        let data = retrieveDb(uuid);
 
         if(data.has(key)) {
 
@@ -110,10 +112,10 @@ module.exports = {
     },
 
     getData: (uuid) =>
-        buildDbName(uuid),
+        retrieveDb(uuid),
     setData: (uuid, obj) => {
-        let data = buildDbName(uuid);
-
+        let data = retrieveDb(uuid);
+        console.log(`******* SETDATA: uuid: ${uuid} *******`);
         data.clear();
         data.merge(obj);
     }

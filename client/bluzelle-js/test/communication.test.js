@@ -3,16 +3,10 @@ const communication = require('../communication');
 const assert = require('assert');
 
 
-beforeEach(reset);
-
-
-it('should be able to reset', () => {});
-
-
 describe('bluzelle connection', () => {
 
     beforeEach(() =>
-        communication.connect('ws://localhost:8100'));
+        communication.connect('ws://localhost:8100', '2222'));
 
     afterEach(() =>
         communication.disconnect());
@@ -22,7 +16,6 @@ describe('bluzelle connection', () => {
 
 
     it('should be able to ping the connection', async () => {
-
         return communication.ping();
 
     });

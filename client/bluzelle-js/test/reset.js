@@ -1,5 +1,4 @@
-
-const resetInNode = () => 
+const resetInNode = () =>
 	
 	// This eval is so that webpack doesn't bundle the emulator,
 	// if we are compiling tests for the browser.
@@ -33,7 +32,8 @@ module.exports = () => {
 
 		return resetInNode();
 
-	} else {
+	}
+	else {
 
 		return resetInBrowser();
 

@@ -41,6 +41,10 @@ describe('bluzelle api', () => {
         await api.update('myOtherKey', "hello world");
         assert(await api.read('myOtherKey') === "hello world");
 
+
+        await api.update('interestingString', "aGVsbG8gd29ybGQNCg==");
+        assert(await api.read('interestingString') === "aGVsbG8gd29ybGQNCg==");
+
     });
 
     it('should be able to create and read object fields', async () => {

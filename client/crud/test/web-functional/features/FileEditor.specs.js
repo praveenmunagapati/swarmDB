@@ -2,7 +2,7 @@ import {newField, save} from "../pageActions";
 import {setData, start} from "../../../../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 
-describe('File Editor', () => {
+describe.only('File Editor', () => {
 
 
     before(() => start());

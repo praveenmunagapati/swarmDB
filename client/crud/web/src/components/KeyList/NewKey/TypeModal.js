@@ -1,5 +1,5 @@
 import {JSONIcon, TextIcon, FileIcon} from "../../ObjIcon";
-import {selectedKey, refresh} from "../KeyList";
+import {selectedKey, refreshKeys} from "../KeyList";
 import {update, remove} from 'bluzelle';
 
 
@@ -30,7 +30,7 @@ export class TypeModal extends Component {
         // provided our actions have decent timesteps.
 
 
-        update(this.props.keyField, keyData).then(refresh);
+        update(this.props.keyField, keyData).then(refreshKeys);
 
         // this.context.execute({
 
@@ -60,16 +60,16 @@ export class TypeModal extends Component {
                 <BS.Modal.Body>
                     <BS.ListGroup>
                         <BS.ListGroupItem onClick={this.chooseJSON.bind(this)}>
-                            <JSONIcon/><span style={{width: 10}}/>
-                            JSON Data
+                            <JSONIcon/>
+                            <span style={{marginLeft: 15}}>JSON Data</span>
                         </BS.ListGroupItem>
                         <BS.ListGroupItem onClick={this.chooseText.bind(this)}>
-                            <TextIcon/><span style={{width: 10}}/>
-                            Plain Text
+                            <TextIcon/>
+                            <span style={{marginLeft: 15}}>Plain Text</span>
                         </BS.ListGroupItem>
                         <BS.ListGroupItem onClick={this.chooseFile.bind(this)}>
-                            <FileIcon/><span style={{width: 10}}/>
-                            File
+                            <FileIcon/>
+                            <span style={{marginLeft: 15}}>File</span>
                         </BS.ListGroupItem>
                     </BS.ListGroup>
                 </BS.Modal.Body>

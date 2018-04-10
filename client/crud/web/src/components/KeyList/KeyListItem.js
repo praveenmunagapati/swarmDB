@@ -1,9 +1,7 @@
 import {ValIcon} from "../ObjIcon";
 import {EditableField} from "../EditableField";
-import {selectedKey, rename} from "./KeyList";
-import {activeValue} from '../../services/CRUDService';
-
-import {update, remove, keys} from 'bluzelle';
+import {selectedKey} from "./KeyList";
+import {activeValue, rename} from '../../services/CRUDService';
 
 
 @observer

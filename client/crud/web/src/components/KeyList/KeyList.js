@@ -2,17 +2,18 @@ import {enableExecution} from "../../services/CommandQueueService";
 import {KeyListItem} from "./KeyListItem";
 import {RemoveButton} from "./RemoveButton";
 import {NewKeyField} from "./NewKey/NewKeyField";
-import {activeValue} from '../../services/CRUDService';
+import {activeValue, save, remove, reload} from '../../services/CRUDService';
 
-import {keys as getKeys, update, read, remove as removeKey} from 'bluzelle';
+import {keys as bzkeys} from 'bluzelle';
+
 
 export const selectedKey = observable(null);
 
 
 const keys = observable([]);
 
-export const refresh = () => 
-    getKeys().then(k => keys.replace(k));
+export const refreshKeys = () => 
+    bzkeys().then(k => keys.replace(k));
 
 
 
@@ -31,7 +32,7 @@ export class KeyList extends Component {
 
     componentWillMount() {
 
-        refresh();
+        refreshKeys();
 
     }
 
@@ -97,69 +98,3 @@ const SaveReloadRemove = observer(({keyname}) =>
             }
 
         </BS.ButtonGroup>);
-
-
-
-
-// Move these into CRUD Service.
-
-const save = () => 
-    update(selectedKey.get(), activeValue.get());
-
-
-const remove = () => {
-
-    const sk = selectedKey.get(); 
-    selectedKey.set();
-
-    return removeKey(sk).then(() => {
-        reload();
-    });
-
-};
-
-
-export const rename = (oldKey, newKey) => new Promise(resolve => {
-
-    read(oldKey).then(v => {
-
-        removeKey(oldKey).then(() => {
-
-            update(newKey, v).then(() => {
-
-                if(selectedKey.get() === oldKey) {
-
-                    selectedKey.set(newKey);
-
-                }
-
-                refresh().then(() => 
-                    reload().then(resolve));
-
-            });
-
-        });
-
-    }); 
-
-});
-    
-
-const reload = () => new Promise(resolve => {
-
-    refresh().then(keys => {
-
-        const sk = selectedKey.get(); 
-        selectedKey.set();
-
-        if(keys.includes(sk)) {
-
-            selectedKey.set(sk);
-
-        }
-
-        resolve();
-
-    });
-
-});

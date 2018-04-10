@@ -13,7 +13,7 @@ const nodes = require('./NodeStore').nodes;
 let initialStartPort;
 let lastPort;
 let randomBehavior = false;
-let defaultUuid = '1111';
+let defaultUuid = '2222';
 
 module.exports = {
     getNodes: () => nodes.values(),
@@ -32,8 +32,12 @@ module.exports = {
 };
 
 module.exports.reset = async function(uuid) {
-    // uuids.clear();
     console.log(`******* RESET *******`);
+    console.log(`uuids before: ${uuid}`);
+    uuids.clear();
+    uuids.merge({});
+    console.log(`uuids after: ${uuid}`);
+
     setup({uuid: '2222'});
     this.start();
 

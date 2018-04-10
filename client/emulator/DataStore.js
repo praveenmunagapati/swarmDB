@@ -7,9 +7,6 @@ const uuids = observable.map({});
 const createDb = uuid => uuids.set(uuid, observable.map({}));
 const retrieveDb = uuid => uuids.get(uuid);
 
-// Need to refactor
-// createDb('1111');
-
 module.exports = {
     uuids: uuids,
 

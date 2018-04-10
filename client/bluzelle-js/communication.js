@@ -157,7 +157,7 @@ const has = key => new Promise(resolve => {
 
 
 module.exports = {
-    uuid: uuid,
+    getUuid: () => uuid,
     connect,
     disconnect,
     ping,

@@ -2,28 +2,12 @@ import {RenderTree} from "./Trees/RenderTree";
 import {observe} from 'mobx';
 import {activeValue} from '../../services/CRUDService';
 
-
-const activeObservableMap = observable();
-
-
-
 import {isObservableArray, isObservable, toJS} from 'mobx';
 import {isPlainObject, mapValues, extend} from 'lodash';
 
 
-// export const get = (obj, propName) =>
-//     () => {
-//         isObservableArray(obj) ? obj[propName] : obj.get(propName);
-//     };
 
-// export const set = (obj, propName) =>
-//     val => obj[propName] = observableMapRecursive(val);
-
-// export const del = (obj, propName) =>
-//     () => {
-//         isObservableArray(obj) ? obj.splice(propName, 1) : obj.delete(propName);
-//     };
-
+const activeObservableMap = observable();
 
 
 export const observableMapRecursive = obj => {
@@ -37,6 +21,9 @@ export const observableMapRecursive = obj => {
 
 };
 
+
+// We update the underyling object of activeValue to mirror activeObservableMap;
+// the observers on activeValue are not called.
 
 const onChange = () => {
 

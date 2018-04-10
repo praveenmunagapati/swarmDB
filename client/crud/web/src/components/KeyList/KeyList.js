@@ -4,7 +4,7 @@ import {RemoveButton} from "./RemoveButton";
 import {NewKeyField} from "./NewKey/NewKeyField";
 import {activeValue} from '../../services/CRUDService';
 
-import {keys as getKeys, update, remove} from 'bluzelle';
+import {keys as getKeys, update, read, remove as removeKey} from 'bluzelle';
 
 export const selectedKey = observable(null);
 
@@ -13,6 +13,7 @@ const keys = observable([]);
 
 export const refresh = () => 
     getKeys().then(k => keys.replace(k));
+
 
 
 @observer
@@ -88,7 +89,7 @@ const SaveReloadRemove = observer(({keyname}) =>
                     <BS.Button onClick={save}>
                         <BS.Glyphicon glyph='floppy-save'/>
                     </BS.Button>
-                    <BS.Button onClick={removeKey}>
+                    <BS.Button onClick={remove}>
                         <BS.Glyphicon glyph='remove'/>
                     </BS.Button>
                 </React.Fragment>
@@ -98,22 +99,53 @@ const SaveReloadRemove = observer(({keyname}) =>
         </BS.ButtonGroup>);
 
 
+
+
+// Move these into CRUD Service.
+
 const save = () => 
     update(selectedKey.get(), activeValue.get());
 
-const removeKey = () => {
+
+const remove = () => {
 
     const sk = selectedKey.get(); 
     selectedKey.set();
 
-    remove(sk).then(() => {
+    return removeKey(sk).then(() => {
         reload();
     });
 
 };
+
+
+export const rename = (oldKey, newKey) => new Promise(resolve => {
+
+    read(oldKey).then(v => {
+
+        removeKey(oldKey).then(() => {
+
+            update(newKey, v).then(() => {
+
+                if(selectedKey.get() === oldKey) {
+
+                    selectedKey.set(newKey);
+
+                }
+
+                refresh().then(() => 
+                    reload().then(resolve));
+
+            });
+
+        });
+
+    }); 
+
+});
     
 
-const reload = () => {
+const reload = () => new Promise(resolve => {
 
     refresh().then(keys => {
 
@@ -126,8 +158,8 @@ const reload = () => {
 
         }
 
+        resolve();
+
     });
 
-}
-
-
+});

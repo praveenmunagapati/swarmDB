@@ -1,4 +1,3 @@
-const reset = require('./reset');
 const communication = require('../communication');
 const assert = require('assert');
 

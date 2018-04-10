@@ -8,15 +8,15 @@ const createDb = uuid => uuids.set(uuid, observable.map({}));
 const retrieveDb = uuid => uuids.get(uuid);
 
 module.exports = {
-    uuids: uuids,
+
+    uuids,
 
     setup: ({uuid, request_id}, ws) => {
         if (!uuids.has(uuid)) {
             createDb(uuid);
-
-            console.log(`******* SETUP: DB created ${uuid}`)
+            console.log(`******* SETUP: DB created ${uuid}`);
         } else {
-            console.log(`******* SETUP: ${uuid} in already in uuids ********`)
+            console.log(`******* SETUP: ${uuid} in already in uuids ********`);
             // ws is undefined
             // ws.send(JSON.stringify(
             //     {
@@ -112,7 +112,6 @@ module.exports = {
         retrieveDb(uuid),
     setData: (uuid, obj) => {
         let data = retrieveDb(uuid);
-        console.log(`******* SETDATA: uuid: ${uuid} *******`);
         data.clear();
         data.merge(obj);
     }

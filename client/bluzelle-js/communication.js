@@ -2,7 +2,7 @@ const WebSocket = require('isomorphic-ws');
 
 const connections = new Set();
 const resolvers = new Map();
-var uuid;
+let uuid;
 
 const ping = () => new Promise(resolve => {
 

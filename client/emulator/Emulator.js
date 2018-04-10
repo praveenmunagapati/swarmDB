@@ -31,20 +31,21 @@ module.exports = {
     isRandom: () => behaveRandomly.get()
 };
 
-module.exports.reset = async function(uuid) {
+module.exports.reset = async function(uuid = defaultUuid) {
     console.log(`******* RESET *******`);
-    console.log(`uuids before: ${uuid}`);
-    uuids.clear();
-    uuids.merge({});
-    console.log(`uuids after: ${uuid}`);
 
-    setup({uuid: '2222'});
+    // This wipes all databases
+    uuids.clear();
+
+    setup({uuid: uuid});
     this.start();
 
     await Promise.all(this.shutdown());
 
     this.setMaxNodes(1);
-    setData(uuid = defaultUuid, {});
+
+    // This emptys a specific database
+    setData(uuid, {});
 
     await new Promise(resolve => (function loop() {
 

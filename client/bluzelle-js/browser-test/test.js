@@ -21,7 +21,7 @@ const ws = new WebSocketServer({
 ws.on('connect', connection => 
 	connection.on('message', async () => {
 
-		await reset();
+		await reset('2222');
 		
 		connection.send('');
 	

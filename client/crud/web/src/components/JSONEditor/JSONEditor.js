@@ -54,7 +54,8 @@ const onChange = () => {
 
 observe(activeValue, ({newValue}) => {
 
-	if(typeof newValue === 'object') {
+	if(typeof newValue === 'object' 
+        && !(newValue instanceof ArrayBuffer)) {
 
 		activeObservableMap.set(observableMapRecursive(newValue));
 

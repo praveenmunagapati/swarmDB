@@ -14,7 +14,7 @@ export class TypeModal extends Component {
     }
 
     chooseFile() {
-        this.addNewKey(new Uint8Array(), 'file');
+        this.addNewKey(new ArrayBuffer(), 'file');
     }
 
 

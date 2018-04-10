@@ -101,9 +101,17 @@ const SaveReloadRemove = observer(({keyname}) =>
 const save = () => 
     update(selectedKey.get(), activeValue.get());
 
-const removeKey = () => 
-    remove(selectedKey.get()).then(() => 
-        reload());
+const removeKey = () => {
+
+    const sk = selectedKey.get(); 
+    selectedKey.set();
+
+    remove(sk).then(() => {
+        reload();
+    });
+
+};
+    
 
 const reload = () => {
 

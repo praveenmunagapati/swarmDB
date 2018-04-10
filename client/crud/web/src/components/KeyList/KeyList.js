@@ -58,6 +58,16 @@ export class KeyList extends Component {
                     <BS.ButtonGroup>
 
                         <AddButton onClick={() => this.setState({showNewKey: true})}/>
+                        
+                        {
+
+                            activeValue.get() !== undefined &&
+
+                            <BS.Button onClick={remove} style={{color: 'red'}}>
+                                <BS.Glyphicon glyph='remove'/>
+                            </BS.Button>
+
+                        }
 
                     </BS.ButtonGroup>
 
@@ -78,7 +88,7 @@ const AddButton = ({onClick}) =>
 const SaveReloadRemove = observer(({keyname}) =>
 
         <BS.ButtonGroup>
-           <BS.Button onClick={reload}>
+           <BS.Button onClick={reload} style={{color: 'DarkBlue'}}>
                 <BS.Glyphicon glyph='refresh'/>
             </BS.Button>
 
@@ -86,14 +96,9 @@ const SaveReloadRemove = observer(({keyname}) =>
 
                 activeValue.get() !== undefined &&
                 
-                <React.Fragment>
-                    <BS.Button onClick={save}>
-                        <BS.Glyphicon glyph='floppy-save'/>
-                    </BS.Button>
-                    <BS.Button onClick={remove}>
-                        <BS.Glyphicon glyph='remove'/>
-                    </BS.Button>
-                </React.Fragment>
+                <BS.Button onClick={save} style={{color: 'DarkGreen'}}>
+                    <BS.Glyphicon glyph='floppy-save'/>
+                </BS.Button>
 
             }
 

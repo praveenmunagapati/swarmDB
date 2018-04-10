@@ -2,8 +2,6 @@ import {JSONEditor} from "./JSONEditor";
 import {PlainTextEditor} from './PlainTextEditor';
 import {FileEditor} from "./FileEditor/FileEditor";
 
-import {obsevableMapRecursive as omr} from '../util/mobXUtils';
-
 import {activeValue} from '../services/CRUDService';
 
 
@@ -12,8 +10,14 @@ export class Editor extends Component {
 
     render() {
 
-        const type = typeof activeValue.get();
+        if(activeValue.get() instanceof ArrayBuffer) {
 
+            return <FileEditor/>;
+
+        }
+
+
+        const type = typeof activeValue.get();
 
         if(type === 'object') {
 
@@ -29,7 +33,7 @@ export class Editor extends Component {
         }
 
 
-        return <div>No Editor for this data type.</div>;
+        return <div></div>;
 
     }
 

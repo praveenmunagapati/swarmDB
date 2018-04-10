@@ -13,6 +13,10 @@ export class TypeModal extends Component {
         this.addNewKey('', 'plain text');
     }
 
+    chooseFile() {
+        this.addNewKey(new Uint8Array(), 'file');
+    }
+
 
     addNewKey(keyData, typeName) {
 
@@ -56,12 +60,16 @@ export class TypeModal extends Component {
                 <BS.Modal.Body>
                     <BS.ListGroup>
                         <BS.ListGroupItem onClick={this.chooseJSON.bind(this)}>
-                            <JSONIcon/>
+                            <JSONIcon/><span style={{width: 10}}/>
                             JSON Data
                         </BS.ListGroupItem>
                         <BS.ListGroupItem onClick={this.chooseText.bind(this)}>
-                            <TextIcon/>
+                            <TextIcon/><span style={{width: 10}}/>
                             Plain Text
+                        </BS.ListGroupItem>
+                        <BS.ListGroupItem onClick={this.chooseFile.bind(this)}>
+                            <FileIcon/><span style={{width: 10}}/>
+                            File
                         </BS.ListGroupItem>
                     </BS.ListGroup>
                 </BS.Modal.Body>

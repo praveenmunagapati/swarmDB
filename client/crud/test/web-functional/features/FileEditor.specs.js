@@ -2,7 +2,7 @@ import {newField, save} from "../pageActions";
 import {setData, start} from "../../../../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 
-describe.only('File Editor', () => {
+describe('File Editor', () => {
 
 
     before(() => start());
@@ -19,7 +19,7 @@ describe.only('File Editor', () => {
     });
 
 
-    it('should be able to upload a file', () => {
+    const upload = () => {
 
         browser.waitForExist('.glyphicon-plus');
 
@@ -37,6 +37,17 @@ describe.only('File Editor', () => {
         
         browser.waitForExist('div*=File size: 0 bytes', 500, true);
 
+    };
+
+    it('should be able to upload a file', () => {
+
+        upload();
+
+    });
+
+    it('should be able to upload a file w/ undo', () => {
+
+        upload();
 
         checkUndo({
             verifyUndo: () => {

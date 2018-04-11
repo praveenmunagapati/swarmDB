@@ -4,6 +4,7 @@ import {Plus, Edit, Delete} from "../Buttons";
 import {Hoverable} from "../Hoverable";
 import {NewField} from "./NewField";
 import {observableMapRecursive as omr} from '../JSONEditor';
+import {execute} from '../../../services/CommandQueueService';
 
 
 @observer
@@ -35,14 +36,16 @@ export class RenderArray extends Component {
 
                         this.setState({ showNewField: false });
 
-                        val.push(omr(newObj));
+                        const v2 = omr(newObj);
 
-                        // this.context.execute({
-                        //     doIt: () => get(obj, propName).push(newObj),
-                        //     undoIt: () => get(obj, propName).pop(),
-                        //     message: <span>Pushed <code key={1}>{JSON.stringify(newObj)}</code> to <code key={2}>{propName}</code>.</span>});
+                        execute({
+                            doIt: () => Promise.resolve(val.push(v2)),
+                            undoIt: () => Promise.resolve(val.pop()),
+                            message: <span>Pushed <code key={1}>{JSON.stringify(newObj)}</code>.</span>});
                     }}
+
                     onError={() => this.setState({showNewField: false})}/>
+
             </Hoverable>;
 
 
@@ -51,8 +54,25 @@ export class RenderArray extends Component {
                 key={index}
 
                 val={value}
-                set={v => val[index] = v}
-                del={() => val.splice(index, 1)}
+                set={v => {
+
+                    execute({
+                        doIt: () => Promise.resolve(val[index] = v),
+                        undoIt: () => Promise.resolve(val[index] = value),
+                        message: <span>Set index <code key={1}>{index}</code> to <code key={2}>{JSON.stringify(v)}</code>.</span>
+                    });
+
+                }}
+
+                del={() => {
+
+                    execute({
+                        doIt: () => Promise.resolve(val.splice(index, 1)),
+                        undoIt: () => Promise.resolve(val.splice(index, 0, value)),
+                        message: <span>Deleted index <code key={1}>{index}</code>.</span>
+                    });
+                    
+                }}
 
                 preamble={<span>{index}</span>}/>);
 

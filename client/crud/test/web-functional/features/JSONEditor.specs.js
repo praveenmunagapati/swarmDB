@@ -2,7 +2,7 @@ import {start, setData} from "../emulator/Emulator";
 import {reset, checkUndo} from "../util";
 import {newField, setJSON} from "../pageActions";
 
-describe('JSON Editor functionality.', () => {
+describe.only('JSON Editor functionality.', () => {
 
     before(() => start());
 
@@ -30,6 +30,7 @@ describe('JSON Editor functionality.', () => {
 
         browser.waitForExist('span*=crazy text');
 
+
         // Since we use nested spans in the styling, we want to click
         // only the innermost one (i.e. the last one) to activate the
         // input.
@@ -38,8 +39,13 @@ describe('JSON Editor functionality.', () => {
 
         last.click();
 
+        browser.waitForExist('input');
+
         browser.setValue('input', '{ "mykey": 123 }');
         browser.submitForm('input');
+
+
+        browser.waitForExist('span*=mykey');
 
     };
 
@@ -107,11 +113,17 @@ describe('JSON Editor functionality.', () => {
 
         browser.click('.glyphicon-pencil');
 
+        browser.waitForExist('input');
+
         browser.keys(['{ "keyA": 123 }', 'Enter']);
 
         browser.moveToObject('span*=123');
 
-        browser.element('.glyphicon-remove').click();
+        browser.waitForExist('.glyphicon-remove');
+
+        browser.elements('.glyphicon-remove').value[1].click();
+
+        browser.waitForExist('span*=123', 500, true);
 
     };
 
@@ -123,6 +135,8 @@ describe('JSON Editor functionality.', () => {
 
 
     it('should have a working delete button for objects w/ undo', () => {
+
+        objDel();
 
         checkUndo({
             verifyDo: () =>
@@ -181,7 +195,7 @@ describe('JSON Editor functionality.', () => {
 
         browser.moveToObject('span*=654');
 
-        browser.element('.glyphicon-remove').click();
+        browser.elements('.glyphicon-remove').value[1].click();
 
     };
 

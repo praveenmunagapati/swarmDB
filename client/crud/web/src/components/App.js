@@ -1,6 +1,6 @@
 import {HashRouter, Route} from 'react-router-dom'
 import {Main} from 'components/Main'
-import {execute, enableExecutionForChildren} from "../services/CommandQueueService";
+import {execute} from "../services/CommandQueueService";
 import DaemonSelector from 'bluzelle-client-common/components/DaemonSelector'
 
 
@@ -17,7 +17,6 @@ import {connect} from 'bluzelle';
 
 
 @observer
-@enableExecutionForChildren
 export class App extends Component {
 
     componentWillMount() {
@@ -26,11 +25,6 @@ export class App extends Component {
             connected: false
         });
 
-    }
-
-
-    getChildContext() {
-        return {execute};
     }
 
 

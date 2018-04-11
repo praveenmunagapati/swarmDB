@@ -18,8 +18,8 @@ export class Main extends Component {
                     <ReflexContainer orientation='vertical'>
                         <ReflexElement flex={0.4}>
 
-                            {/*<CommandControls/>
-                            <hr/>*/}
+                            <CommandControls/>
+                            <hr/>
                             <KeyList/>
 
                         </ReflexElement>

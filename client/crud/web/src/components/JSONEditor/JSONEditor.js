@@ -5,6 +5,7 @@ import {activeValue} from '../../services/CRUDService';
 import {isObservableArray, isObservable, toJS} from 'mobx';
 import {isPlainObject, mapValues, extend} from 'lodash';
 
+import {execute} from '../../services/CommandQueueService';
 
 
 const activeObservableMap = observable();
@@ -66,7 +67,26 @@ export class JSONEditor extends Component {
 
         return <RenderTree 
             val={activeObservableMap.get()} 
-            set={v => activeObservableMap.set(observableMapRecursive(v))}
+            set={v => {
+
+                if(typeof v !== 'object') {
+
+                    alert('Must be object type.');
+                    return;
+
+                }
+
+
+                const v2 = observableMapRecursive(v);
+                const old = activeObservableMap.get();
+
+                execute({
+                    doIt: () => Promise.resolve(activeObservableMap.set(v2)),
+                    undoIt: () => Promise.resolve(activeObservableMap.set(old)),
+                    message: <span>Set root to <code key={1}>{JSON.stringify(v)}</code>.</span>
+                })
+              
+            }}
             />;
 
     }

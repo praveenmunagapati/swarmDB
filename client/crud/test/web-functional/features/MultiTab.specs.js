@@ -13,7 +13,7 @@ describe('Multi-client functionality.', () => {
 
         start();
 
-        browser.url('http://localhost:8200/?test');
+        browser.url('http://localhoast:8200/?test');
         browser.newWindow('http://localhost:8200/?test');
 
         browser.waitUntil(() => browser.getTabIds().length == 2);

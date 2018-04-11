@@ -1,11 +1,12 @@
 import {KeyListItem} from "./KeyListItem";
 import {NewKeyField} from "./NewKey/NewKeyField";
 import {activeValue, save, remove, reload} from '../../services/CRUDService';
+import {execute, removePreviousHistory, updateHistoryMessage} from '../../services/CommandQueueService';
 
-import {keys as bzkeys} from 'bluzelle';
+import {update, keys as bzkeys} from 'bluzelle';
 
 
-export const selectedKey = observable(null);
+export const selectedKey = observable(undefined);
 
 
 const keys = observable([]);
@@ -61,7 +62,7 @@ export class KeyList extends Component {
 
                             activeValue.get() !== undefined &&
 
-                            <BS.Button onClick={remove} style={{color: 'red'}}>
+                            <BS.Button onClick={executeRemove} style={{color: 'red'}}>
                                 <BS.Glyphicon glyph='remove'/>
                             </BS.Button>
 
@@ -76,6 +77,48 @@ export class KeyList extends Component {
     }
 }
 
+
+const executeRemove = () => {
+
+    const sk = selectedKey.get();
+    const val = activeValue.get();
+
+
+    execute({
+
+        doIt: () => remove(),
+
+        undoIt: () => new Promise(resolve =>
+
+            update(sk, val).then(() => reload().then(() => {
+
+                selectedKey.set(sk);
+                resolve();
+
+            }))),
+
+        message: <span>Removed key <code key={1}>{sk}</code>.</span>
+
+    });
+
+};
+
+
+// Doesn't play nice with the current system of undos.
+
+// An idea: track changes to observables and automatically 
+// generate undo/redo behavior based on single command.
+
+const executeReload = () => {
+
+    reload();
+
+    removePreviousHistory();
+    updateHistoryMessage('Reload');
+
+};
+
+
 const AddButton = ({onClick}) => 
 
     <BS.Button onClick={onClick} style={{color: 'green'}}>
@@ -86,7 +129,7 @@ const AddButton = ({onClick}) =>
 const SaveReloadRemove = observer(({keyname}) =>
 
         <BS.ButtonGroup>
-           <BS.Button onClick={reload} style={{color: 'DarkBlue'}}>
+           <BS.Button onClick={executeReload} style={{color: 'DarkBlue'}}>
                 <BS.Glyphicon glyph='refresh'/>
             </BS.Button>
 

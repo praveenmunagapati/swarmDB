@@ -1,6 +1,7 @@
 import {JSONIcon, TextIcon, FileIcon} from "../../ObjIcon";
 import {selectedKey, refreshKeys} from "../KeyList";
 import {update, remove} from 'bluzelle';
+import {execute} from '../../../services/CommandQueueService';
 
 
 export class TypeModal extends Component {
@@ -23,26 +24,17 @@ export class TypeModal extends Component {
         const oldSelection = selectedKey.get();
 
 
-        // Would we have to revise execution to do async/await?
-        // For now, let's not. But consider it for the future.
+        execute({
+            doIt: () => new Promise(resolve =>
+                update(this.props.keyField, keyData).then(() =>
+                    refreshKeys().then(resolve))),
 
-        // In fact we should, but for now it's non-essential
-        // provided our actions have decent timesteps.
+            undoIt: () => new Promise(resolve =>
+                remove(this.props.keyField).then(() =>
+                    refreshKeys().then(resolve))),
 
-
-        update(this.props.keyField, keyData).then(refreshKeys);
-
-        // this.context.execute({
-
-        //     doIt: () => 
-        //         update(this.props.keyField, keyData).then(refresh),
-
-        //     undoIt: () => 
-        //         remove(this.props.keyField).then(refresh),
-
-        //     message: <span>Created <code key={1}>{keyField}</code> as {typeName}.</span>
-        
-        // });
+            message: <span>Added field <code key={1}>{this.props.keyField}</code>.</span>
+        });
 
         this.props.onHide();
 

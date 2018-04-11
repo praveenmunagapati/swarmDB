@@ -3,21 +3,34 @@ import {EditableField} from "../EditableField";
 import {selectedKey} from "./KeyList";
 import {activeValue, rename} from '../../services/CRUDService';
 
+import {execute} from '../../services/CommandQueueService';
+
 
 @observer
 export class KeyListItem extends Component {
 
     select(target) {
 
-        selectedKey.set(target);
+        const old = selectedKey.get();
 
+        execute({
+
+            doIt: () => Promise.resolve(selectedKey.set(target)),
+            undoIt: () => Promise.resolve(selectedKey.set(old)),
+            message: <span>Selected <code key={1}>{target}</code>.</span>
+
+        });
     }
 
     rename(newKey) {
 
         const { keyname: oldKey } = this.props;
 
-        rename(oldKey, newKey);
+        execute({
+            doIt: () => rename(oldKey, newKey),
+            undoIt: () => rename(newKey, oldKey),
+            message: <span>Renamed <code key={1}>{oldKey}</code> to <code key={2}>{newKey}</code>.</span>
+        });
 
     }
 

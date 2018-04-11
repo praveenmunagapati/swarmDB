@@ -52,8 +52,6 @@ export const rename = (oldKey, newKey) => new Promise(resolve => {
 
             	const s = selectedKey;
 
-            	debugger;
-
                 if(selectedKey.get() === oldKey) {
 
                     selectedKey.set(newKey);

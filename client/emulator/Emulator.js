@@ -32,7 +32,9 @@ module.exports = {
 };
 
 module.exports.reset = async function(uuid = defaultUuid) {
-    console.log(`******* RESET *******`);
+
+    process.env.emulatorQuiet || 
+        console.log(`******* RESET *******`);
 
     // This wipes all databases
     uuids.clear();

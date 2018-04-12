@@ -14,9 +14,14 @@ module.exports = {
     setup: ({uuid, request_id}, ws) => {
         if (!uuids.has(uuid)) {
             createDb(uuid);
-            console.log(`******* SETUP: DB created ${uuid}`);
+
+            process.env.emulatorQuiet || 
+                console.log(`******* SETUP: DB created ${uuid}`);
+
         } else {
-            console.log(`******* SETUP: ${uuid} in already in uuids ********`);
+
+            process.env.emulatorQuiet || 
+                console.log(`******* SETUP: ${uuid} in already in uuids ********`);
             // ws is undefined
             // ws.send(JSON.stringify(
             //     {

@@ -1,8 +1,11 @@
+const reset = require('./reset');
 const communication = require('../communication');
 const assert = require('assert');
 
 
 describe('bluzelle connection', () => {
+
+    beforeEach(reset);
 
     beforeEach(() =>
         communication.connect('ws://localhost:8100', '2222'));

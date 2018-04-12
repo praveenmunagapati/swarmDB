@@ -5,6 +5,8 @@ const assert = require('assert');
 
 describe('bluzelle api', () => {
 
+    beforeEach(reset);
+
     beforeEach(() =>
         api.connect('ws://localhost:8100', '2222'));
 

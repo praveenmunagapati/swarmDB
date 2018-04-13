@@ -25,8 +25,8 @@ module.exports = {
         return nodes.values().map(node => node.shutdown())
     },
     start: _.once(start),
-    getData: getData(uuid = defaultUuid),
-    setData: () => setData(uuid = defaultUuid),
+    getData: uuid => getData(uuid),
+    setData: uuid => setData(uuid),
     behaveRandomly: (v) => behaveRandomly.set(v),
     isRandom: () => behaveRandomly.get()
 };

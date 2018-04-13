@@ -1,6 +1,7 @@
 const {observable, toJS, observe} = require('mobx');
 const {forEach} = require('lodash');
 const {nodes} = require('./NodeStore');
+const {defaultUuid} = require('./Emulator');
 
 
 const uuids = observable.map({});
@@ -109,9 +110,9 @@ module.exports = {
 
     },
 
-    getData: (uuid) =>
+    getData: (uuid = defaultUuid) =>
         retrieveDb(uuid),
-    setData: (uuid, obj) => {
+    setData: (uuid = defaultUuid, obj) => {
         let data = retrieveDb(uuid);
         data.clear();
         data.merge(obj);

@@ -14,22 +14,18 @@ module.exports = {
     setup: ({uuid, request_id}, ws) => {
         if (!uuids.has(uuid)) {
             createDb(uuid);
+        } else if (ws) {
 
-            process.env.emulatorQuiet || 
-                console.log(`******* SETUP: DB created ${uuid}`);
-
+                ws.send(JSON.stringify(
+                    {
+                        error: `Sorry, the uuid, ${uuid}, is already taken.`,
+                        response_to: request_id
+                    }
+                ));
         } else {
-
-            process.env.emulatorQuiet || 
+            process.env.emulatorQuiet ||
                 console.log(`******* SETUP: ${uuid} in already in uuids ********`);
-            // ws is undefined
-            // ws.send(JSON.stringify(
-            //     {
-            //         error: `Sorry, the uuid, ${uuid}, is already taken.`,
-            //         response_to: request_id
-            //     }
-            // ));
-        };
+        }
     },
 
     read: ({uuid, request_id, data:{key}}, ws) => {

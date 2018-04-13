@@ -33,9 +33,6 @@ module.exports = {
 
 module.exports.reset = async function(uuid = defaultUuid) {
 
-    process.env.emulatorQuiet || 
-        console.log(`******* RESET *******`);
-
     // This wipes all databases
     uuids.clear();
 
@@ -46,7 +43,7 @@ module.exports.reset = async function(uuid = defaultUuid) {
 
     this.setMaxNodes(1);
 
-    // This emptys a specific database
+    // This empties a specific database
     setData(uuid, {});
 
     await new Promise(resolve => (function loop() {

@@ -74,6 +74,8 @@ module.exports = function Node(port) {
         connections.push(connection);
         connection.on('message', ({utf8Data: message}) => {
             const command = JSON.parse(message);
+            console.log(`******* WS COMMAND RECEIVED BY EMULATOR NODE *******`);
+            console.dir(command)
             CommandProcessors[command.cmd](command, connection);
         });
     });

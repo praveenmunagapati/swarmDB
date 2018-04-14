@@ -22,6 +22,8 @@ const connect = (addr, id) => {
         const s = new WebSocket(addr);
 
         s.onopen = () => {
+            console.log('connected');
+            setup();
 
             connections.add(s);
             resolve(s);
@@ -36,7 +38,11 @@ const connect = (addr, id) => {
 
         }
 
-        s.onmessage = e => onMessage(JSON.parse(e.data), s);
+        s.onmessage = e => {
+            console.log(`>>>>>>>>> WS REPLY RECEIVED BY JS LIBRARY COM >>>>>>>>>`)
+            console.dir(e.data)
+            onMessage(JSON.parse(e.data), s);
+        }
 
     });
 
@@ -44,7 +50,6 @@ const connect = (addr, id) => {
 
 
 const onMessage = (event, socket) => {
-
     resolvers.get(event.response_to)(event);
     resolvers.delete(event.response_to);
 
@@ -92,6 +97,19 @@ const send = (obj, resolver) => {
         connection.send(JSON.stringify(message));
     }
 };
+
+const setup = () => new Promise((resolve, reject) => {
+    console.log(`>>>>>>>>> SENDING WS SETUP ${uuid} >>>>>>>>>`);
+
+    const cmd = amendBznApi({
+        cmd: 'setup'
+    });
+
+
+    send(cmd, obj =>
+        obj.error ? reject(new Error(obj.error)) : resolve(obj.data.value));
+
+});
 
 
 const update = (key, value) => new Promise((resolve, reject) => {
@@ -161,7 +179,7 @@ module.exports = {
     connect,
     disconnect,
     ping,
-
+    setup,
     read,
     update,
     'delete': delet, // delete is a reserved keyword

@@ -40,7 +40,7 @@ module.exports = {
 
     uuids,
 
-    setup: ({uuid, request_id}, ws) => {
+    setup: ({'db-uuid':uuid, request_id}, ws) => {
         if (!uuids.has(uuid)) {
             createDb(uuid);
 
@@ -51,7 +51,7 @@ module.exports = {
         }
     },
 
-    read: ({uuid, request_id, data:{key}}, ws) => {
+    read: ({'db-uuid':uuid, request_id, data:{key}}, ws) => {
         let data = retrieveDb(uuid);
 
         if(data.has(key)) {
@@ -80,7 +80,7 @@ module.exports = {
         }
     },
 
-    update: ({uuid, request_id, data:{key, value}}, ws) => {
+    update: ({'db-uuid':uuid, request_id, data:{key, value}}, ws) => {
 
         let data = retrieveDb(uuid);
 
@@ -93,7 +93,7 @@ module.exports = {
         ));
     },
 
-    has: ({uuid, request_id, data:{key}}, ws) => {
+    has: ({'db-uuid':uuid, request_id, data:{key}}, ws) => {
 
         let data = retrieveDb(uuid);
 
@@ -108,7 +108,7 @@ module.exports = {
         ));
     },
 
-    'delete': ({uuid, request_id, data:{key}}, ws) => {
+    'delete': ({'db-uuid':uuid, request_id, data:{key}}, ws) => {
 
         let data = retrieveDb(uuid);
 

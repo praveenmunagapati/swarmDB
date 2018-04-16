@@ -36,7 +36,7 @@ module.exports.reset = async function(uuid = defaultUuid) {
     // This wipes all databases
     uuids.clear();
 
-    setup({uuid: uuid});
+    setup({'db-uuid': uuid});
     this.start();
 
     await Promise.all(this.shutdown());
@@ -76,7 +76,7 @@ function start(startPort = 8100, uuid = defaultUuid) {
         setTimeout(checkNeedLessNodes, 250);
     }());
 
-    setup({uuid: uuid});
+    setup({'db-uuid': uuid});
 }
 
 

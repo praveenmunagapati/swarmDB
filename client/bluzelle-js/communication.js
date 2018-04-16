@@ -66,7 +66,7 @@ const amendBznApi = obj =>
 
 const amendUuid = (uuid, obj) =>
     Object.assign(obj, {
-        'uuid': uuid
+        'db-uuid': uuid
     });
 
 

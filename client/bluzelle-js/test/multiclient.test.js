@@ -11,7 +11,9 @@ delete require.cache[path.resolve(__dirname + '/../api.js')];
 const api2 = require('../api');
 
 
-describe('multi-client bluzelle api', () => {
+// Run if testing in browser, otherwise skip
+(typeof window === 'undefined' ? describe : describe.skip)('multi-client bluzelle api', () => {
+
 
     beforeEach(reset);
 

@@ -1,6 +1,7 @@
 const http = require('http');
 const WebSocketServer = require('websocket').server;
 const reset = require('../emulator/Emulator').reset;
+const uuid = require('../communication').getUuid();
 
 
 
@@ -21,10 +22,8 @@ const ws = new WebSocketServer({
 ws.on('connect', connection => 
 	connection.on('message', async () => {
 
-		await reset('2222');
-		
+		await reset(uuid);
 		connection.send('');
-	
 	}));
 
 

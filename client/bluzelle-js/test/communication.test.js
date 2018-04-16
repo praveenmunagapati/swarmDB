@@ -7,8 +7,10 @@ describe('bluzelle connection', () => {
 
     beforeEach(reset);
 
-    beforeEach(() =>
-        communication.connect('ws://localhost:8100', '7777'));
+    beforeEach( async () => {
+        await communication.connect('ws://localhost:8100', '7777');
+        communication.setup();
+    });
 
     afterEach(() =>
         communication.disconnect());

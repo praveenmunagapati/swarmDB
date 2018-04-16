@@ -8,8 +8,10 @@ describe('reset', () => {
 
     beforeEach(reset);
 
-    beforeEach(async () =>
-        await communication.connect('ws://localhost:8100', '2222'));
+    beforeEach(async () => {
+        await communication.connect('ws://localhost:8100', '2222');
+        communication.setup();
+    });
 
     afterEach(() =>
         communication.disconnect());

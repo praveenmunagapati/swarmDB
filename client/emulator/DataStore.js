@@ -9,7 +9,6 @@ const createDb = uuid => uuids.set(uuid, observable.map({}));
 const retrieveDb = uuid => uuids.get(uuid);
 
 const respondSuccess = (uuid, request_id, ws) => {
-    console.log(`******* respondSuccess ws: ${ws}, uuid: ${uuid}, request_id: ${request_id} *******`);
     if (ws) {
         ws.send(JSON.stringify(
             {
@@ -24,7 +23,6 @@ const respondSuccess = (uuid, request_id, ws) => {
 };
 
 const respondError = (uuid, request_id, ws) => {
-    console.log(`******* respondError ws: ${ws}, uuid: ${uuid}, request_id: ${request_id} *******`);
     if (ws) {
         ws.send(JSON.stringify(
             {
@@ -43,9 +41,9 @@ module.exports = {
     uuids,
 
     setup: ({uuid, request_id}, ws) => {
-        console.log(`******* EMULATOR RECEIVED SETUP COMMAND: ws? ${ws} *******`);
         if (!uuids.has(uuid)) {
             createDb(uuid);
+
             respondSuccess(uuid, request_id, ws)
 
         } else {
@@ -53,26 +51,7 @@ module.exports = {
         }
     },
 
-    // setup: ({uuid, request_id}, ws) => {
-    //     if (!uuids.has(uuid)) {
-    //         createDb(uuid);
-    //         console.log(`******* SETUP: createDB ${uuid} *******`);
-    //     } else if (ws) {
-    //
-    //             ws.send(JSON.stringify(
-    //                 {
-    //                     error: `Sorry, the uuid, ${uuid}, is already taken.`,
-    //                     response_to: request_id
-    //                 }
-    //             ));
-    //     } else {
-    //         process.env.emulatorQuiet ||
-    //             console.log(`******* SETUP: ${uuid} in already in uuids ********`);
-    //     }
-    // },
-
     read: ({uuid, request_id, data:{key}}, ws) => {
-        console.log(`******* READ: using ${uuid} *******`);
         let data = retrieveDb(uuid);
 
         if(data.has(key)) {
@@ -102,7 +81,6 @@ module.exports = {
     },
 
     update: ({uuid, request_id, data:{key, value}}, ws) => {
-        console.log(`******* UPDATE: using ${uuid} *******`);
 
         let data = retrieveDb(uuid);
 
@@ -116,7 +94,6 @@ module.exports = {
     },
 
     has: ({uuid, request_id, data:{key}}, ws) => {
-        console.log(`******* HAS: using ${uuid} *******`);
 
         let data = retrieveDb(uuid);
 
@@ -132,7 +109,6 @@ module.exports = {
     },
 
     'delete': ({uuid, request_id, data:{key}}, ws) => {
-        console.log(`******* DELETE: using ${uuid} *******`);
 
         let data = retrieveDb(uuid);
 

@@ -3,17 +3,17 @@ const api = require('../api');
 const assert = require('assert');
 
 
-describe.only('bluzelle api', function() {
+describe('bluzelle api', function() {
 
     beforeEach(reset);
 
-    beforeEach( async function() {
-        await api.connect('ws://localhost:8100', '9999');
-        // api.setup();
+    beforeEach( async () => {
+        await api.connect('ws://localhost:8100', '0001');
+        api.setup();
     });
+
     afterEach(() =>
         api.disconnect());
-
 
 
     it('should be able to create and read number fields', async () => {

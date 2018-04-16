@@ -22,8 +22,6 @@ const connect = (addr, id) => {
         const s = new WebSocket(addr);
 
         s.onopen = () => {
-            console.log('connected');
-            setup();
 
             connections.add(s);
             resolve(s);
@@ -38,11 +36,8 @@ const connect = (addr, id) => {
 
         }
 
-        s.onmessage = e => {
-            console.log(`>>>>>>>>> WS REPLY RECEIVED BY JS LIBRARY COM >>>>>>>>>`)
-            console.dir(e.data)
-            onMessage(JSON.parse(e.data), s);
-        }
+        s.onmessage = e =>
+            onMessage(JSON.parse(e.data), s)
 
     });
 
@@ -90,7 +85,6 @@ const amendRequestID = (() => {
 const send = (obj, resolver) => {
 
     const message = amendUuid(uuid , amendRequestID(obj));
-
     resolvers.set(message.request_id, resolver);
 
     for(let connection of connections.values()) {
@@ -99,7 +93,6 @@ const send = (obj, resolver) => {
 };
 
 const setup = () => new Promise((resolve, reject) => {
-    console.log(`>>>>>>>>> SENDING WS SETUP ${uuid} >>>>>>>>>`);
 
     const cmd = amendBznApi({
         cmd: 'setup'
@@ -107,7 +100,7 @@ const setup = () => new Promise((resolve, reject) => {
 
 
     send(cmd, obj =>
-        obj.error ? reject(new Error(obj.error)) : resolve(obj.data.value));
+        obj.error ? reject(new Error(obj.error)) : resolve());
 
 });
 

@@ -8,7 +8,7 @@ describe('bluzelle api', function() {
     beforeEach(reset);
 
     beforeEach( async () => {
-        await api.connect('ws://localhost:8100', '0001');
+        await api.connect('ws://localhost:8100', '71e2cd35-b606-41e6-bb08-f20de30df76c');
         api.setup();
     });
 
